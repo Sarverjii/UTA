@@ -1,0 +1,261 @@
+/* General Body/Root Styles */
+.rootContainer {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: #f8fbfc; /* Corresponds to bg-[#f8fbfc] */
+  overflow-x: hidden;
+  /* Font families are ideally defined globally in public/index.html or a global CSS file */
+  /* font-family: "Noto Serif", "Noto Sans", sans-serif; */
+}
+
+.layoutContainer {
+  display: flex;
+  height: 100%;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
+/* Main Content Area */
+.mainContentWrapper {
+  padding-left: 160px; /* Corresponds to px-40 */
+  padding-right: 160px; /* Corresponds to px-40 */
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding-top: 20px; /* Corresponds to py-5 */
+  padding-bottom: 20px; /* Corresponds to py-5 */
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 960px;
+  flex: 1;
+}
+
+/* About Us Section */
+.aboutSection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px; /* Corresponds to gap-3 */
+  padding: 16px; /* Corresponds to p-4 */
+}
+
+.aboutTextGroup {
+  display: flex;
+  min-width: 288px; /* Corresponds to min-w-72 */
+  flex-direction: column;
+  gap: 12px; /* Corresponds to gap-3 */
+}
+
+.aboutHeading {
+  color: #0d181b;
+  letter-spacing: -0.025em; /* Corresponds to tracking-light */
+  font-size: 32px; /* Corresponds to text-[32px] */
+  font-weight: 700;
+  line-height: 1.25; /* Corresponds to leading-tight */
+}
+
+.aboutParagraph {
+  color: #4c869a;
+  font-size: 14px; /* Corresponds to text-sm */
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* General Section Headings (Our Mission, History, Key Personnel) */
+.sectionHeading {
+  color: #0d181b;
+  font-size: 22px; /* Corresponds to text-[22px] */
+  font-weight: 700;
+  line-height: 1.25; /* Corresponds to leading-tight */
+  letter-spacing: -0.015em;
+  padding-left: 16px; /* Corresponds to px-4 */
+  padding-right: 16px; /* Corresponds to px-4 */
+  padding-bottom: 12px; /* Corresponds to pb-3 */
+  padding-top: 20px; /* Corresponds to pt-5 */
+}
+
+/* General Section Paragraphs */
+.sectionParagraph {
+  color: #0d181b;
+  font-size: 16px; /* Corresponds to text-base */
+  font-weight: 400;
+  line-height: normal;
+  padding-bottom: 12px; /* Corresponds to pb-3 */
+  padding-top: 4px; /* Corresponds to pt-1 */
+  padding-left: 16px; /* Corresponds to px-4 */
+  padding-right: 16px; /* Corresponds to px-4 */
+}
+
+/* Key Personnel Table Styles */
+.tableContainer {
+  padding-left: 16px; /* Corresponds to px-4 */
+  padding-right: 16px; /* Corresponds to px-4 */
+  padding-top: 12px; /* Corresponds to py-3 */
+  padding-bottom: 12px; /* Corresponds to py-3 */
+  /* @container for responsive table columns, requires PostCSS setup */
+}
+
+.tableWrapper {
+  display: flex;
+  overflow: hidden; /* For rounded corners */
+  border-radius: 8px;
+  border: 1px solid #cfe1e7;
+  background-color: #f8fbfc;
+}
+
+.personnelTable {
+  flex: 1; /* Table takes full width within its wrapper */
+  border-collapse: collapse; /* Ensure borders are clean */
+}
+
+.tableHeaderRow {
+  background-color: #f8fbfc;
+}
+
+.tableHeader {
+  padding: 12px 16px; /* Corresponds to px-4 py-3 */
+  text-align: left;
+  color: #0d181b;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+/* Specific column widths (can be adjusted for responsiveness) */
+.colName { width: 400px; }
+.colPosition { width: 400px; }
+.colContact { width: 400px; }
+
+.tableRow {
+  border-top: 1px solid #cfe1e7; /* Corresponds to border-t border-t-[#cfe1e7] */
+}
+
+.tableCell {
+  height: 72px; /* Corresponds to h-[72px] */
+  padding: 8px 16px; /* Corresponds to px-4 py-2 */
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.tableCell.colName { color: #0d181b; }
+.tableCell.colPosition { color: #4c869a; }
+.tableCell.colContact { color: #4c869a; }
+
+/* Container Queries for Table Columns - requires PostCSS setup */
+/* These simulate the Tailwind @container behavior */
+@container (max-width: 120px) {
+  .colName { display: none; }
+}
+@container (max-width: 240px) {
+  .colPosition { display: none; }
+}
+@container (max-width: 360px) {
+  .colContact { display: none; }
+}
+
+/* Image Grid Styles */
+.imageGridContainer {
+  display: flex;
+  width: 100%;
+  flex-grow: 1;
+  background-color: #f8fbfc;
+  padding-top: 12px; /* Corresponds to py-3 */
+  padding-bottom: 12px; /* Corresponds to py-3 */
+  /* @container for responsive grid, adjust if needed */
+}
+
+.imageGrid {
+  width: 100%;
+  gap: 4px; /* Corresponds to gap-1 */
+  overflow: hidden;
+  background-color: #f8fbfc;
+  aspect-ratio: 3 / 2; /* Corresponds to aspect-[3/2] */
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr; /* Corresponds to grid-cols-[2fr_1fr_1fr] */
+}
+
+/* Adjust gap for larger screens */
+@container (min-width: 480px) { /* Corresponds to @[480px]:gap-2 */
+  .imageGrid {
+    gap: 8px;
+  }
+}
+
+.gridImageLarge {
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  aspect-ratio: auto; /* Corresponds to aspect-auto */
+  border-radius: 0;
+  grid-row: span 2 / span 2; /* Corresponds to row-span-2 */
+}
+
+.gridImageSmall1, .gridImageSmall2 {
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  aspect-ratio: auto;
+  border-radius: 0;
+  grid-column: span 2 / span 2; /* Corresponds to col-span-2 */
+}
+
+/* Media Queries for overall page responsiveness */
+@media (max-width: 1024px) { /* Adjust padding for smaller screens */
+  .mainContentWrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContentWrapper {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .aboutHeading {
+    font-size: 28px;
+  }
+
+  .sectionHeading {
+    font-size: 20px;
+  }
+
+  .sectionParagraph {
+    font-size: 15px;
+  }
+
+  .tableHeader {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .tableCell {
+    font-size: 13px;
+    padding: 6px 12px;
+    height: auto; /* Allow height to adjust */
+  }
+
+  /* Adjust grid layout for smaller screens if needed */
+  .imageGrid {
+    grid-template-columns: 1fr; /* Stack images vertically */
+    aspect-ratio: auto; /* Remove fixed aspect ratio */
+  }
+
+  .gridImageLarge, .gridImageSmall1, .gridImageSmall2 {
+    grid-column: span 1 / span 1; /* Each image takes full width */
+    grid-row: span 1 / span 1;
+    height: 200px; /* Example fixed height for stacked images */
+  }
+}

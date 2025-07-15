@@ -1,0 +1,229 @@
+/* Header Styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 40px;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  
+}
+
+.headerLogoGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoIcon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoIcon img {
+  height: 48px;
+}
+
+.headerTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.headerNavActions {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navbarNav {
+  display: flex;
+  gap: 60px;
+}
+
+.navbarNav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  font-size: 18px;
+  transition: color 0.2s ease-in-out;
+}
+
+.navbarNav a:hover {
+  color: #007bff;
+}
+
+.headerButtons {
+  display: flex;
+  gap: 20px;
+}
+
+.loginButton {
+  background-color: #e0e0e0;
+  color: #222;
+  padding: 8px 30px;
+  border-radius: 4px;
+  font-size: 18px;
+  text-decoration: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.loginButton:hover {
+  background-color: #c9c9c9;
+}
+
+.registerButton {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 15px;
+  text-decoration: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.registerButton:hover {
+  background-color: #0056b3;
+}
+
+.buttonText {
+  font-weight: 500;
+}
+
+.mobileMenuIcon {
+  display: none;
+}
+
+/* Mobile Menu Icon - visible on small screens */
+@media screen and (max-width: 1250px) {
+  .navbarNav,
+  .headerButtons {
+    display: none;
+  }
+
+  .mobileMenuIcon {
+    display: flex;
+    align-items: center;
+  }
+
+  .header {
+    padding: 12px 20px;
+  }
+
+  .logoIcon img {
+    height: 24px;
+  }
+
+  .headerTitle {
+    font-size: 15px;
+  }
+}
+
+.mobileMenuButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.mobileMenuButton:hover {
+  background-color: #f0f0f0;
+}
+
+.mobileMenuSvg {
+  width: 26px;
+  height: 26px;
+  color: #333;
+}
+
+/* Mobile Navigation Overlay */
+.mobileNavOverlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 300px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 20px;
+  overflow: hidden;
+  justify-content: space-between;
+}
+
+.mobileNavOpen {
+  transform: translateX(0);
+}
+
+.mobileNavHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.mobileCloseButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  padding: 6px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.mobileCloseButton:hover {
+  background-color: #f0f0f0;
+}
+
+.mobileNavLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mobileNavLinks .navLink {
+  font-size: 16px;
+  color: #333;
+  text-decoration: none;
+  padding: 6px 0;
+}
+
+.mobileNavLinks .navLink:hover {
+  color: #007bff;
+  background-color: #f2f2f2;
+  border-radius: 4px;
+  padding-left: 8px;
+}
+
+.mobileNavButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+  margin-top: auto;
+}
+
+.mobileNavButtons .registerButton,
+.mobileNavButtons .loginButton {
+  width: 100%;
+  font-size: 15px;
+  padding: 10px;
+  text-align: center;
+}
