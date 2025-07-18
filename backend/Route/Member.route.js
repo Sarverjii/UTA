@@ -7,7 +7,8 @@ const router = express.Router();
 router.post("/register/", PlayerLoginController.register);
 
 router.post("/login/", PlayerLoginController.login);
-router.get("/get/:id", authenticateDB, PlayerLoginController.getMe);
+
+router.get("/get", authenticateDB, PlayerLoginController.getMe);
 
 router.post("/logout/", PlayerLoginController.logout);
 

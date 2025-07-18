@@ -8,7 +8,8 @@ const districtSchema = new mongoose.Schema(
       required: true,
       trim: true,
       unique: true, // District names should likely be unique
-      enum: [ // Added enum for specific district names
+      enum: [
+        // Added enum for specific district names
         "Almora",
         "Bageshwar",
         "Chamoli",
@@ -102,6 +103,10 @@ const districtSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    status: {
+      type: String,
+      default: UnVerified,
     },
   },
   { timestamps: true }

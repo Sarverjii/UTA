@@ -68,8 +68,8 @@ const Login = () => {
         // On successful login, you might want to:
         // 1. Store user data in global state (e.g., Context API, Redux)
         // 2. Redirect the user to the dashboard
-        console.log("Login successful:", res.data);
-        dispatch(setUser(res.data.user));
+        const newUser = { ...res.data.user, type: loginType };
+        dispatch(setUser(newUser));
         navigate("/"); // Redirect to dashboard on success
         // You can also clear the form here if needed:
         // setLoginForm({ identifier: "", password: "" });

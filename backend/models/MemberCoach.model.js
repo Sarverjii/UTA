@@ -12,6 +12,10 @@ const CoachSchema = new mongoose.Schema({
   academyPhone: { type: String },
   academyEmail: { type: String },
   password: { type: String, required: true },
+  status: {
+    type: String,
+    default: UnVerified,
+  },
 });
 
 module.exports = mongoose.model("Coach", CoachSchema);

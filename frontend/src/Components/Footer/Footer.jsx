@@ -54,22 +54,20 @@ const Footer = () => {
         {/* Contact Information */}
         <div className={styles.footerContact}>
           <h4>Contact Us</h4>
-          <p>
-            <address>
-              123 Tennis Court Road, <br />
-              Dehradun, Uttarakhand, <br />
-              India - 248001
-            </address>
-          </p>
+          {/* REMOVED the <p> tag here */} {" "}
+          <address>
+            123 Tennis Court Road, <br />
+            Dehradun, Uttarakhand, <br />  India - 248001{" "}
+          </address>{" "}
           <p>
             Email:{" "}
             <a href="mailto:info@utranchaltennis.org">
-              info@utranchaltennis.org
-            </a>
-          </p>
+              info@utranchaltennis.org{" "}
+            </a>{" "}
+          </p>{" "}
           <p>
-            Phone: <a href="tel:+911234567890">+91 12345 67890</a>
-          </p>
+            Phone: <a href="tel:+911234567890">+91 12345 67890</a> {" "}
+          </p>{" "}
         </div>
 
         {/* Social Media Links */}

@@ -2,7 +2,7 @@
 
 const jwt = require("jsonwebtoken");
 const MemberAcademy = require("../models/MemberAcademy.model");
-const Coach = require("../models/Coach.model");
+const Coach = require("../models/MemberCoach.model");
 const MemberDistrict = require("../models/MemberDistrict.model");
 const MemberPlayer = require("../models/MemberPlayer.model");
 
@@ -70,12 +70,10 @@ const authenticateDB = async (req, res, next) => {
 
     if (!user) {
       // User not found in DB (e.g., account deleted)
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message: "User associated with token not found.",
-        });
+      return res.status(401).json({
+        success: false,
+        message: "User associated with token not found.",
+      });
     }
 
     // Optional: Add more checks here if needed (e.g., user is active/not banned)
@@ -93,29 +91,23 @@ const authenticateDB = async (req, res, next) => {
 
     // Handle specific JWT errors
     if (error.name === "TokenExpiredError") {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message: "Token expired, please log in again.",
-        });
+      return res.status(401).json({
+        success: false,
+        message: "Token expired, please log in again.",
+      });
     }
     if (error.name === "JsonWebTokenError") {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message: "Invalid token, please log in again.",
-        });
+      return res.status(401).json({
+        success: false,
+        message: "Invalid token, please log in again.",
+      });
     }
 
     // Generic error for other issues
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "Authentication failed due to server error.",
-      });
+    return res.status(500).json({
+      success: false,
+      message: "Authentication failed due to server error.",
+    });
   }
 };
 
