@@ -7,14 +7,17 @@ import {
   useDraggable,
   useDroppable,
   closestCenter,
+  useSensors,
+  useSensor,
 } from "@dnd-kit/core";
+import { TouchSensor } from "@dnd-kit/core";
 
 const Match = ({
   team,
   isWinnerSlot = false,
   roundIndex,
   matchId,
-  slotType
+  slotType,
 }) => {
   let teamDisplayName;
   if (isWinnerSlot) {
@@ -47,6 +50,8 @@ const Match = ({
       }
     : undefined;
 
+  const isDraggable = !(!team && roundIndex !== 0); // Re-evaluate the draggable condition for clarity
+
   return (
     <div
       ref={(node) => {
@@ -56,11 +61,13 @@ const Match = ({
       style={style}
       className={`${styles.matchSlot} ${isDragging ? styles.dragging : ""} ${
         isOver ? styles.over : ""
-      }`}
+      } ${isDraggable ? styles.draggableSlot : ""}`} // Add new class for draggable slots
       {...listeners}
       {...attributes}
     >
       <div className={styles.teamName}>{teamDisplayName}</div>
+      {isDraggable && <span className={styles.dragHandle}>⠿</span>}{" "}
+      {/* Drag icon */}
     </div>
   );
 };
@@ -77,7 +84,9 @@ const Round = ({ title, matches, roundIndex, totalRounds }) => {
             key={match._id || `match-${roundIndex}-${matchIndex}`}
           >
             <div className={styles.matchPair}>
-              <div className={styles.matchNumber}>Match {match.Match_number}</div>
+              <div className={styles.matchNumber}>
+                Match {match.Match_number}
+              </div>
               <Match
                 team={match.Team1}
                 roundIndex={roundIndex}
@@ -90,7 +99,6 @@ const Round = ({ title, matches, roundIndex, totalRounds }) => {
                 matchId={match._id}
                 slotType="Team2"
               />
-              
             </div>
             {!isLastRound && <div className={styles.connectorLine}></div>}
           </React.Fragment>
@@ -158,7 +166,9 @@ const ManageDraw = () => {
         toast.success("Draws created/reset successfully!");
         fetchDraws();
       } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to create/reset draws.");
+        toast.error(
+          error.response?.data?.message || "Failed to create/reset draws."
+        );
         console.error("Error creating draws:", error);
       }
       setLoading(false);
@@ -235,8 +245,12 @@ const ManageDraw = () => {
 
     // Find the original source and target draws from the current state (before setDraws)
     const currentDraws = draws; // Use the state variable directly
-    const originalSourceDraw = currentDraws.find(draw => draw._id === sourceMatchId);
-    const originalTargetDraw = currentDraws.find(draw => draw._id === targetMatchId);
+    const originalSourceDraw = currentDraws.find(
+      (draw) => draw._id === sourceMatchId
+    );
+    const originalTargetDraw = currentDraws.find(
+      (draw) => draw._id === targetMatchId
+    );
 
     if (!originalSourceDraw || !originalTargetDraw) {
       console.error("Original source or target draw not found.");
@@ -246,9 +260,11 @@ const ManageDraw = () => {
     const originalTargetTeam = originalTargetDraw[targetSlotType]; // Team originally in the target slot
 
     setDraws((prevDraws) => {
-      const newDraws = prevDraws.map(draw => {
+      const newDraws = prevDraws.map((draw) => {
         if (draw._id === sourceMatchId) {
-          const newSourceSlotValue = originalTargetTeam ? originalTargetTeam : null;
+          const newSourceSlotValue = originalTargetTeam
+            ? originalTargetTeam
+            : null;
           return { ...draw, [sourceSlotType]: newSourceSlotValue };
         } else if (draw._id === targetMatchId) {
           return { ...draw, [targetSlotType]: draggedTeam };
@@ -269,7 +285,9 @@ const ManageDraw = () => {
           targetMatchId,
           targetSlotType,
           draggedTeamId: draggedTeam ? draggedTeam._id : null,
-          originalTargetTeamId: originalTargetTeam ? originalTargetTeam._id : null,
+          originalTargetTeamId: originalTargetTeam
+            ? originalTargetTeam._id
+            : null,
         },
         { withCredentials: true }
       );
@@ -284,6 +302,8 @@ const ManageDraw = () => {
 
   const rounds = buildRounds(draws);
   const totalRounds = rounds.length;
+
+  const sensors = useSensors(useSensor(TouchSensor));
 
   return (
     <div className={styles.manageDrawContainer}>
@@ -327,9 +347,12 @@ const ManageDraw = () => {
       {loading ? (
         <p>Loading draws...</p> // Or a spinner component
       ) : draws.length === 0 ? (
-        <p>No draws made for this event yet. Create new draws to get started!</p>
+        <p>
+          No draws made for this event yet. Create new draws to get started!
+        </p>
       ) : (
         <DndContext
+          sensors={sensors}
           onDragEnd={handleDragEnd}
           collisionDetection={closestCenter}
         >

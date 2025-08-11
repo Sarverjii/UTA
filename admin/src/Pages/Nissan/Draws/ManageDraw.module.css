@@ -166,3 +166,22 @@
   border-radius: 4px;
   z-index: 10; /* Ensure it's above other elements */
 }
+
+.draggableSlot {
+  cursor: grab;
+  position: relative; /* Needed for absolute positioning of drag handle */
+}
+
+.draggableSlot.dragging {
+  cursor: grabbing;
+}
+
+.dragHandle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2em;
+  color: #888;
+  cursor: grab; /* Ensure grab cursor on the handle itself */
+}
