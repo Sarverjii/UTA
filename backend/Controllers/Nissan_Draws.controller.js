@@ -57,11 +57,24 @@ exports.updateDrawOrder = async (req, res) => {
 exports.updateMatchup = async (req, res) => {
   try {
     console.log("RAN 1");
+    console.log(req.body);
     const { matchId, teamField, teamId } = req.body;
     await drawService.updateMatchup(matchId, teamField, teamId);
     res
       .status(200)
       .json({ success: true, message: "Matchup updated successfully." });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+exports.swapMatchup = async (req, res) => {
+  try {
+    const { sourceMatchId, sourceSlotType, targetMatchId, targetSlotType, draggedTeamId, originalTargetTeamId } = req.body;
+    await drawService.swapMatchup(sourceMatchId, sourceSlotType, targetMatchId, targetSlotType, draggedTeamId, originalTargetTeamId);
+    res
+      .status(200)
+      .json({ success: true, message: "Matchup swapped successfully." });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }

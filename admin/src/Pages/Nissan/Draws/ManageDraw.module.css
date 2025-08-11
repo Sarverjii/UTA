@@ -142,3 +142,27 @@
   font-weight: 500;
 }
 
+.dragging {
+  opacity: 0.5;
+  background-color: #e0e0e0;
+  border: 1px dashed #999;
+}
+
+.over {
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 8px rgba(var(--primary-color-rgb), 0.5);
+}
+
+.matchNumber {
+  position: absolute;
+  top: -20px; /* Offset from the top of matchPair */
+  left: 50%;
+  transform: translateX(-50%); /* Center horizontally */
+  font-size: 0.8em;
+  color: #777;
+  white-space: nowrap;
+  background-color: #f9f9f9; /* Match bracketContainer background */
+  padding: 2px 8px;
+  border-radius: 4px;
+  z-index: 10; /* Ensure it's above other elements */
+}

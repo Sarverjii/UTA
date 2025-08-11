@@ -131,7 +131,9 @@ exports.deleteDraw = async (drawId) => {
 exports.updateDrawOrder = async (orderedMatches) => {
   try {
     const promises = orderedMatches.map((matchId, index) => {
-      return Nissan_Draws.findByIdAndUpdate(matchId, { Match_number: index + 1 });
+      return Nissan_Draws.findByIdAndUpdate(matchId, {
+        Match_number: index + 1,
+      });
     });
     await Promise.all(promises);
   } catch (error) {
@@ -141,6 +143,7 @@ exports.updateDrawOrder = async (orderedMatches) => {
 
 exports.updateMatchup = async (matchId, teamField, teamId) => {
   try {
+    console.log(matchId + " " + teamField + " " + teamId);
     if (!mongoose.Types.ObjectId.isValid(matchId)) {
       throw new Error(`Invalid matchId: ${matchId}`);
     }
@@ -153,6 +156,22 @@ exports.updateMatchup = async (matchId, teamField, teamId) => {
     await Nissan_Draws.findByIdAndUpdate(matchId, updateData);
   } catch (error) {
     console.error("Error in updateMatchup service:", error);
+    throw new Error(error.message);
+  }
+};
+
+exports.swapMatchup = async (sourceMatchId, sourceSlotType, targetMatchId, targetSlotType, draggedTeamId, originalTargetTeamId) => {
+  try {
+    // Update target slot with dragged team
+    const updateTargetData = { [targetSlotType]: draggedTeamId ? draggedTeamId : null };
+    await Nissan_Draws.findByIdAndUpdate(targetMatchId, updateTargetData);
+
+    // Update source slot with original target team
+    const updateSourceData = { [sourceSlotType]: originalTargetTeamId ? originalTargetTeamId : null };
+    await Nissan_Draws.findByIdAndUpdate(sourceMatchId, updateSourceData);
+
+  } catch (error) {
+    console.error("Error in swapMatchup service:", error);
     throw new Error(error.message);
   }
 };

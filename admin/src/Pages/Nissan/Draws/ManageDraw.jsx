@@ -2,8 +2,20 @@ import React, { useState, useEffect } from "react";
 import api from "../../../api";
 import styles from "./ManageDraw.module.css";
 import { toast } from "sonner";
+import {
+  DndContext,
+  useDraggable,
+  useDroppable,
+  closestCenter,
+} from "@dnd-kit/core";
 
-const Match = ({ team, isWinnerSlot = false, roundIndex }) => {
+const Match = ({
+  team,
+  isWinnerSlot = false,
+  roundIndex,
+  matchId,
+  slotType
+}) => {
   let teamDisplayName;
   if (isWinnerSlot) {
     teamDisplayName = "Winner";
@@ -15,8 +27,39 @@ const Match = ({ team, isWinnerSlot = false, roundIndex }) => {
     }`;
   }
 
+  const id = `${matchId}-${slotType}`;
+
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: id,
+      data: { team, matchId, roundIndex, slotType },
+      disabled: !team && roundIndex !== 0, // Disable dragging for TBD slots (except BYE in Stage 1)
+    });
+
+  const { setNodeRef: setDroppableNodeRef, isOver } = useDroppable({
+    id: id,
+    data: { team, matchId, roundIndex, slotType },
+  });
+
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined;
+
   return (
-    <div className={styles.matchSlot}>
+    <div
+      ref={(node) => {
+        setNodeRef(node);
+        setDroppableNodeRef(node);
+      }}
+      style={style}
+      className={`${styles.matchSlot} ${isDragging ? styles.dragging : ""} ${
+        isOver ? styles.over : ""
+      }`}
+      {...listeners}
+      {...attributes}
+    >
       <div className={styles.teamName}>{teamDisplayName}</div>
     </div>
   );
@@ -30,14 +73,26 @@ const Round = ({ title, matches, roundIndex, totalRounds }) => {
       <h2 className={styles.roundTitle}>{title}</h2>
       <div className={styles.matchesContainer}>
         {matches.map((match, matchIndex) => (
-          <React.Fragment key={match._id || `match-${roundIndex}-${matchIndex}`}>
+          <React.Fragment
+            key={match._id || `match-${roundIndex}-${matchIndex}`}
+          >
             <div className={styles.matchPair}>
-              <Match team={match.Team1} roundIndex={roundIndex} />
-              <Match team={match.Team2} roundIndex={roundIndex} />
+              <div className={styles.matchNumber}>Match {match.Match_number}</div>
+              <Match
+                team={match.Team1}
+                roundIndex={roundIndex}
+                matchId={match._id}
+                slotType="Team1"
+              />
+              <Match
+                team={match.Team2}
+                roundIndex={roundIndex}
+                matchId={match._id}
+                slotType="Team2"
+              />
+              
             </div>
-            {!isLastRound && (
-              <div className={styles.connectorLine}></div>
-            )}
+            {!isLastRound && <div className={styles.connectorLine}></div>}
           </React.Fragment>
         ))}
       </div>
@@ -154,6 +209,79 @@ const ManageDraw = () => {
       }));
   };
 
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const draggedTeam = active.data.current.team;
+    const sourceMatchId = active.data.current.matchId;
+    const sourceSlotType = active.data.current.slotType;
+    const sourceRoundIndex = active.data.current.roundIndex;
+
+    const targetMatchId = over.data.current.matchId;
+    const targetSlotType = over.data.current.slotType;
+    const targetRoundIndex = over.data.current.roundIndex;
+
+    if (sourceMatchId === targetMatchId) {
+      toast.error("Cannot swap within the same matchup.");
+      return;
+    }
+
+    if (sourceRoundIndex !== targetRoundIndex) {
+      toast.error("Cannot swap teams between different stages.");
+      return;
+    }
+
+    // Find the original source and target draws from the current state (before setDraws)
+    const currentDraws = draws; // Use the state variable directly
+    const originalSourceDraw = currentDraws.find(draw => draw._id === sourceMatchId);
+    const originalTargetDraw = currentDraws.find(draw => draw._id === targetMatchId);
+
+    if (!originalSourceDraw || !originalTargetDraw) {
+      console.error("Original source or target draw not found.");
+      return;
+    }
+
+    const originalTargetTeam = originalTargetDraw[targetSlotType]; // Team originally in the target slot
+
+    setDraws((prevDraws) => {
+      const newDraws = prevDraws.map(draw => {
+        if (draw._id === sourceMatchId) {
+          const newSourceSlotValue = originalTargetTeam ? originalTargetTeam : null;
+          return { ...draw, [sourceSlotType]: newSourceSlotValue };
+        } else if (draw._id === targetMatchId) {
+          return { ...draw, [targetSlotType]: draggedTeam };
+        }
+        return draw;
+      });
+
+      return newDraws;
+    });
+
+    // Make API call to save the changes
+    try {
+      await api.put(
+        "http://localhost:3000/api/nissan-draws/swap-matchup/",
+        {
+          sourceMatchId,
+          sourceSlotType,
+          targetMatchId,
+          targetSlotType,
+          draggedTeamId: draggedTeam ? draggedTeam._id : null,
+          originalTargetTeamId: originalTargetTeam ? originalTargetTeam._id : null,
+        },
+        { withCredentials: true }
+      );
+      toast.success("Draw updated successfully!");
+    } catch (error) {
+      toast.error("Failed to update draw.");
+      console.error("Error updating draw:", error);
+      // Optionally, revert the UI state if the API call fails
+      // setDraws(prevDraws); // This would require storing the prevDraws before setDraws
+    }
+  };
+
   const rounds = buildRounds(draws);
   const totalRounds = rounds.length;
 
@@ -197,17 +325,22 @@ const ManageDraw = () => {
       </div>
 
       {draws.length > 0 && (
-        <div className={styles.bracketContainer}>
-          {rounds.map((round, roundIndex) => (
-            <Round
-              key={round.title}
-              title={round.title}
-              matches={round.matches}
-              roundIndex={roundIndex}
-              totalRounds={totalRounds}
-            />
-          ))}
-        </div>
+        <DndContext
+          onDragEnd={handleDragEnd}
+          collisionDetection={closestCenter}
+        >
+          <div className={styles.bracketContainer}>
+            {rounds.map((round, roundIndex) => (
+              <Round
+                key={round.title}
+                title={round.title}
+                matches={round.matches}
+                roundIndex={roundIndex}
+                totalRounds={totalRounds}
+              />
+            ))}
+          </div>
+        </DndContext>
       )}
     </div>
   );
