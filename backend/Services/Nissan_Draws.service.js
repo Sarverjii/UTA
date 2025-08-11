@@ -2,27 +2,6 @@ const mongoose = require("mongoose");
 const Nissan_Draws = require("../models/Nissan_Draws.model.js");
 const Team = require("../models/Team.model.js");
 
-// Helper function to generate a standard single-elimination bracket seeding order
-// This generates the order of seeds (1-indexed) for a bracket of given size.
-// Example: generateBracketSeedingOrder(8) => [1, 8, 4, 5, 2, 7, 3, 6]
-const generateBracketSeedingOrder = (numSlots) => {
-  const order = [];
-  const recurse = (min, max) => {
-    if (min > max) return;
-    if (min === max) {
-      order.push(min);
-      return;
-    }
-    order.push(min);
-    order.push(max);
-    if (max - min > 1) {
-      recurse(min + 1, max - 1);
-    }
-  };
-  recurse(1, numSlots);
-  return order;
-};
-
 exports.createDrawforEvent = async (eventId) => {
   try {
     await Nissan_Draws.deleteMany({ Event: eventId });
@@ -38,36 +17,44 @@ exports.createDrawforEvent = async (eventId) => {
     const numRounds = Math.log2(bracketSize);
     const byes = bracketSize - numTeams;
 
-    let seededParticipants = new Array(bracketSize).fill(null); // Array to hold teams in bracket order
-
-    // Get the standard seeding order for the bracket size
-    const seedingOrder = generateBracketSeedingOrder(bracketSize);
-
-    // Place teams into the bracket slots according to seeding order
-    // Teams are 1-indexed for seeding, so adjust to 0-indexed array
-    for (let i = 0; i < numTeams; i++) {
-      const seed = i + 1; // Current team's seed (1-indexed)
-      const bracketPosition = seedingOrder.indexOf(seed); // Find where this seed goes in the bracket
-      seededParticipants[bracketPosition] = teams[i]._id; // Place the team (0-indexed) at that position
+    // --- Build top-to-bottom bracket seed order ---
+    function buildBracketSlots(n) {
+      if (n === 1) return [1];
+      const half = buildBracketSlots(n / 2);
+      const mirror = half.map((x) => n + 1 - x);
+      const out = [];
+      for (let i = 0; i < half.length; i++) {
+        out.push(half[i]);
+        out.push(mirror[i]);
+      }
+      return out;
     }
+    const slots = buildBracketSlots(bracketSize);
 
-    // Create Round 1 matches
     let matches = [];
     let matchNum = 1;
-    for (let i = 0; i < bracketSize / 2; i++) {
-      const team1 = seededParticipants[i * 2];
-      const team2 = seededParticipants[i * 2 + 1];
+
+    // --- Create Round 1 matches in visual bracket order ---
+    for (let i = 0; i < slots.length; i += 2) {
+      const seedA = slots[i];
+      const seedB = slots[i + 1];
+
+      const teamA = seedA <= numTeams ? teams[seedA - 1]._id : null;
+      const teamB = seedB <= numTeams ? teams[seedB - 1]._id : null;
+
+      // Skip match if both are empty
+      if (teamA === null && teamB === null) continue;
 
       matches.push({
         Event: eventId,
         Stage: "Round 1",
         Match_number: matchNum++,
-        Team1: team1,
-        Team2: team2,
+        Team1: teamA,
+        Team2: teamB,
       });
     }
 
-    // Create subsequent rounds with null teams
+    // --- Create subsequent rounds with null teams ---
     let numMatchesInNextRound = bracketSize / 4; // Matches in Round 2
     for (let round = 2; round <= numRounds; round++) {
       for (let i = 0; i < numMatchesInNextRound; i++) {
@@ -160,16 +147,26 @@ exports.updateMatchup = async (matchId, teamField, teamId) => {
   }
 };
 
-exports.swapMatchup = async (sourceMatchId, sourceSlotType, targetMatchId, targetSlotType, draggedTeamId, originalTargetTeamId) => {
+exports.swapMatchup = async (
+  sourceMatchId,
+  sourceSlotType,
+  targetMatchId,
+  targetSlotType,
+  draggedTeamId,
+  originalTargetTeamId
+) => {
   try {
     // Update target slot with dragged team
-    const updateTargetData = { [targetSlotType]: draggedTeamId ? draggedTeamId : null };
+    const updateTargetData = {
+      [targetSlotType]: draggedTeamId ? draggedTeamId : null,
+    };
     await Nissan_Draws.findByIdAndUpdate(targetMatchId, updateTargetData);
 
     // Update source slot with original target team
-    const updateSourceData = { [sourceSlotType]: originalTargetTeamId ? originalTargetTeamId : null };
+    const updateSourceData = {
+      [sourceSlotType]: originalTargetTeamId ? originalTargetTeamId : null,
+    };
     await Nissan_Draws.findByIdAndUpdate(sourceMatchId, updateSourceData);
-
   } catch (error) {
     console.error("Error in swapMatchup service:", error);
     throw new Error(error.message);

@@ -116,7 +116,7 @@ const ManageDraw = () => {
         );
         setDraws(drawsRes.data.data);
       } catch (error) {
-        toast.error("Error fetching data.");
+        toast.error(error.response?.data?.message || "Error fetching data.");
         console.error("Error fetching data:", error);
         setDraws([]);
       }
@@ -158,7 +158,7 @@ const ManageDraw = () => {
         toast.success("Draws created/reset successfully!");
         fetchDraws();
       } catch (error) {
-        toast.error("Failed to create/reset draws.");
+        toast.error(error.response?.data?.message || "Failed to create/reset draws.");
         console.error("Error creating draws:", error);
       }
       setLoading(false);
@@ -178,7 +178,7 @@ const ManageDraw = () => {
         setDraws([]);
         toast.success("All draws for this event deleted successfully!");
       } catch (error) {
-        toast.error("Failed to delete draws.");
+        toast.error(error.response?.data?.message || "Failed to delete draws.");
         console.error("Error deleting draws:", error);
       }
       setLoading(false);
@@ -275,7 +275,7 @@ const ManageDraw = () => {
       );
       toast.success("Draw updated successfully!");
     } catch (error) {
-      toast.error("Failed to update draw.");
+      toast.error(error.response?.data?.message || "Failed to update draw.");
       console.error("Error updating draw:", error);
       // Optionally, revert the UI state if the API call fails
       // setDraws(prevDraws); // This would require storing the prevDraws before setDraws
@@ -324,7 +324,11 @@ const ManageDraw = () => {
         )}
       </div>
 
-      {draws.length > 0 && (
+      {loading ? (
+        <p>Loading draws...</p> // Or a spinner component
+      ) : draws.length === 0 ? (
+        <p>No draws made for this event yet. Create new draws to get started!</p>
+      ) : (
         <DndContext
           onDragEnd={handleDragEnd}
           collisionDetection={closestCenter}

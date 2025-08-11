@@ -15,9 +15,12 @@ import ManageDraw from "./Pages/Nissan/Draws/ManageDraw";
 import ManageResult from "./Pages/Nissan/ManageResult";
 import UpdateEvents from "./Pages/Nissan/UpdateEvents/UpdateEvents";
 
+import { Toaster } from "sonner";
+
 function App() {
   return (
     <Router>
+      <Toaster richColors position="top-center" />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route
