@@ -16,27 +16,29 @@ import Nissan_Home from "./Pages/Nissan_Home/Nissan_Home";
 import Nissan_Register from "./Pages/Nissan_Register/Nissan_Register";
 import Nissan_RegisteredPlayers from "./Pages/Nissan_RegisteredPlayers/Nissan_RegisteredPlayers";
 import Nissan_Login from "./Pages/Nissan_Login/Nissan_Login";
+import Nissan_Login_Page from "./Pages/Nissan_Login/LoginPage.jsx";
+
 import Tournaments from "./Pages/Tournaments/Tournaments";
+import TournamentDetail from "./Pages/TournamentDetails/TournamentDetail";
 import About from "./Pages/AboutUs/About";
 import JoinUs from "./Pages/JoinUs/JoinUs";
 import Contact from "./Pages/Contact/Contact";
 import Layout from "./Layout";
 import Login from "./Pages/Login/Login";
-import Dashboard from "./Pages/Dashboard/Dashboard";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/tournament" element={<Tournaments />} />
+        <Route path="/tournaments" element={<Tournaments />} />
+        <Route path="/tournaments/:id" element={<TournamentDetail />} />
         <Route path="/about" element={<About />} />
         <Route path="/joinUs" element={<JoinUs />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
       </Route>
 
-      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/Nissan/" element={<Nissan_Home />} />
       <Route path="/Nissan/register" element={<Nissan_Register />} />
       <Route
@@ -44,7 +46,8 @@ const router = createBrowserRouter(
         element={<Nissan_RegisteredPlayers />}
       />
       <Route path="/Nissan/login" element={<Nissan_Login />} />
-      {/*<Route path="*" element={<WrongURL />} /> */}
+      <Route path="/Nissan/login/:id" element={<Nissan_Login_Page />} />
+      {/* <Route path="*" element={<WrongURL />} /> */}
     </>
   )
 );

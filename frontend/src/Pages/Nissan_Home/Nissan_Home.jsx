@@ -85,20 +85,20 @@ export default function Home() {
             >
               Contact
             </a>
-            <a className={styles.navLink} href="/registered-players">
+            <a className={styles.navLink} href="/Nissan/registered-players">
               Registered Players
             </a>
           </div>
           {/* Action Buttons */}
           <div className={styles.headerButtons}>
             <Link
-              to="/register" // Assuming a registration route
+              to="/Nissan/register" // Assuming a registration route
               className={styles.registerButton}
             >
               <span className={styles.buttonText}>Register Now</span>
             </Link>
             <Link
-              to="/login" // Assuming a login route
+              to="/Nissan/login" // Assuming a login route
               className={styles.loginButton}
             >
               <span className={styles.buttonText}>Login</span>
@@ -189,20 +189,20 @@ export default function Home() {
           >
             Contact
           </a>
-          <a className={styles.navLink} href="/registered-players">
+          <a className={styles.navLink} href="/Nissan/registered-players">
             Registered Players
           </a>
         </div>
         <div className={styles.mobileNavButtons}>
           <Link
-            to="/register"
+            to="/Nissan/register"
             className={styles.registerButton}
             onClick={() => setMobileMenuOpen(false)} // Close menu on navigation
           >
             <span className={styles.buttonText}>Register Now</span>
           </Link>
           <Link
-            to="/login"
+            to="/Nissan/login"
             className={styles.loginButton}
             onClick={() => setMobileMenuOpen(false)} // Close menu on navigation
           >
@@ -237,10 +237,10 @@ export default function Home() {
                   </h2>
                 </div>
                 <div className={styles.bannerButtons}>
-                  <Link to="/register" className={styles.registerButton}>
+                  <Link to="/Nissan/register" className={styles.registerButton}>
                     <span className={styles.buttonText}>Register Now</span>
                   </Link>
-                  <Link to="/login" className={styles.loginButton}>
+                  <Link to="/Nissan/login" className={styles.loginButton}>
                     <span className={styles.buttonText}>Login</span>
                   </Link>
                 </div>
@@ -423,10 +423,13 @@ export default function Home() {
             networking opportunities!
           </p>
           <div className={styles.ctaButtons}>
-            <Link to="/register" className={styles.registerButtonCta}>
+            <Link to="/Nissan/register" className={styles.registerButtonCta}>
               <span className={styles.buttonText}>Register Now</span>
             </Link>
-            <Link to="/registered-players" className={styles.loginButtonCta}>
+            <Link
+              to="/Nissan/registered-players"
+              className={styles.loginButtonCta}
+            >
               <span className={styles.buttonText}>Registered Players</span>
             </Link>
           </div>
@@ -439,9 +442,6 @@ export default function Home() {
           © {new Date().getFullYear()} Uttranchal Tennis Association. All rights
           reserved.
         </p>
-        <Link to="/admin-login" className={styles.adminLoginLink}>
-          Admin Login
-        </Link>
       </footer>
     </div>
   );

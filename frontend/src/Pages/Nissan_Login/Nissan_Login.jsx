@@ -1,20 +1,24 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import styles from "./Login.module.css";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import styles from "./Nissan_Login.module.css";
 
-const Login = () => {
+const Nissan_Login = () => {
   const navigate = useNavigate();
   const [login, setLogin] = useState({
     whatsappNumber: "",
     dob: "",
   });
 
-  const loginHandler = async () => {
+  const loginHandler = async (e) => {
+    e.preventDefault();
+    if (!login.whatsappNumber || !login.dob) {
+      return toast.error(
+        "Please enter your WhatsApp number and date of birth."
+      );
+    }
     try {
-      console.log(login);
       const res = await axios.post(
         `${import.meta.env.VITE_APP_BACKEND_URL}/api/player/login`,
         login,
@@ -24,45 +28,87 @@ const Login = () => {
         }
       );
       if (res.data.success) {
-        navigate(`/login/${res.data.data.id}`);
+        navigate(`/nissan/login/${res.data.data.id}`);
         toast.success(res.data.message);
       }
     } catch (error) {
-      toast.error("Incorrect Credentials");
+      toast.error(error.response?.data?.message || "Incorrect Credentials");
       console.log(error);
     }
   };
 
   return (
-    <div>
+    <div className={styles.loginPage}>
       <header className={styles.header}>
         <div className={styles.headerLogoGroup}>
           <div className={styles.logoIcon}>
             <img src="/logo.png" alt="UTA LOGO" />
+            <h2 className={styles.headerTitle}>
+              Uttranchal Tennis Association
+            </h2>
           </div>
         </div>
-        <h2 className={styles.headerTitle}>Uttranchal Tennis Association</h2>
-        <Link to={"/"}>Back to Home</Link>
+        <div className={styles.headerNavActions}>
+          <div className={styles.headerButtons}>
+            <Link to="/Nissan" className={styles.backButton}>
+              <span className={styles.buttonText}>Back to Home</span>
+            </Link>
+          </div>
+        </div>
       </header>
 
-      <h2>Player Login</h2>
-      <label htmlFor="number"></label>
-      <input
-        type="tel"
-        name="number"
-        id="number"
-        onChange={(e) => setLogin({ ...login, whatsappNumber: e.target.value })}
-      />
-      <label htmlFor="dob">Enter your Date of Birth</label>
-      <input
-        type="date"
-        name="dob"
-        id="dob"
-        onChange={(e) => setLogin({ ...login, dob: e.target.value })}
-      />
-      <button onClick={loginHandler}>Login</button>
+      <main className={styles.loginContainer}>
+        <form className={styles.loginForm} onSubmit={loginHandler}>
+          <h2 className={styles.formTitle}>Player Login</h2>
+          <p className={styles.formSubtitle}>
+            Access your player dashboard to manage your events.
+          </p>
+
+          <div className={styles.inputGroup}>
+            <label htmlFor="whatsappNumber" className={styles.label}>
+              WhatsApp Number
+            </label>
+            <input
+              type="tel"
+              id="whatsappNumber"
+              className={styles.input}
+              placeholder="Enter your WhatsApp number"
+              value={login.whatsappNumber}
+              onChange={(e) =>
+                setLogin({ ...login, whatsappNumber: e.target.value })
+              }
+              required
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label htmlFor="dob" className={styles.label}>
+              Date of Birth
+            </label>
+            <input
+              type="date"
+              id="dob"
+              className={styles.input}
+              value={login.dob}
+              onChange={(e) => setLogin({ ...login, dob: e.target.value })}
+              required
+            />
+          </div>
+
+          <button type="submit" className={styles.loginButton}>
+            Login
+          </button>
+
+          <p className={styles.registerPrompt}>
+            Don't have an account?{" "}
+            <Link to="/nissan/register" className={styles.registerLink}>
+              Register here
+            </Link>
+          </p>
+        </form>
+      </main>
     </div>
   );
 };
 
-export default Login;
+export default Nissan_Login;

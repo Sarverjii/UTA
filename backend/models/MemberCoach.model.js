@@ -14,7 +14,7 @@ const CoachSchema = new mongoose.Schema({
   password: { type: String, required: true },
   status: {
     type: String,
-    default: UnVerified,
+    default: "UnVerified",
   },
 });
 

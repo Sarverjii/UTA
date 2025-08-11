@@ -33,8 +33,7 @@
 
 /* Hero Section Styles */
 .tournamentsHeroSection {
-  /* Using a placeholder image for banner.jpg and img3.jpg. Replace with actual paths. */
-  background-image: url("/banner.jpg"); /* Default background image */
+  background-image: url("/banner.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -47,14 +46,14 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-bottom: 30px; /* Space below the hero section */
+  margin-bottom: 30px;
 }
 
 .tournamentsHeroHeading {
   font-size: 2.5em;
   margin-bottom: 15px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  font-weight: 700; /* Added font-weight for h2 */
+  font-weight: 700;
 }
 
 .tournamentsHeroParagraph {

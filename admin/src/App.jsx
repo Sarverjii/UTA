@@ -1,35 +1,148 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./Pages/Login/Login";
+import Dashboard from "./Pages/Dashboard/Dashboard";
+import Layout from "./components/Layout/Layout";
+import Users from "./Pages/Users/Users";
+import Settings from "./Pages/Settings/Settings";
+import Members from "./Pages/Members/Members";
+import Events from "./Pages/Events/Events";
+import Approvals from "./Pages/Approvals/Approvals";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import Nissan from "./Pages/Nissan/Nissan";
+import UpdateTeamRanking from "./Pages/Nissan/Ranking/UpdateTeamRanking";
+import ViewPlayerList from "./Pages/Nissan/Players/ViewPlayerList";
+import ManageDraw from "./Pages/Nissan/ManageDraw";
+import ManageResult from "./Pages/Nissan/ManageResult";
+import UpdateEvents from "./Pages/Nissan/UpdateEvents/UpdateEvents";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Users />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Settings />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/members"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Members />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/events"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Events />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/nissan"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Nissan />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/nissan/update-team-ranking"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <UpdateTeamRanking />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/nissan/view-player-list"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ViewPlayerList />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/nissan/manage-draw"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ManageDraw />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/nissan/manage-result"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ManageResult />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/nissan/update-events"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <UpdateEvents />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/approvals"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Approvals />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;

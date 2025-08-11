@@ -111,6 +111,30 @@ const authenticateDB = async (req, res, next) => {
   }
 };
 
+const isAdmin = (req, res, next) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized: No token provided" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    email = decoded.email;
+    password = decoded.password;
+    if (
+      email !== process.env.ADMIN_LOGIN_USERNAME &&
+      password !== process.env.ADMIN_LOGIN_PASSWORD
+    )
+      throw Error;
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: "Unauthorized: Invalid token" });
+  }
+};
+
 module.exports = {
   authenticateDB,
+  isAdmin,
 };

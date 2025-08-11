@@ -53,7 +53,7 @@ const academySchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: UnVerified
+      default: "UnVerified"
     },
   },
   { timestamps: true }

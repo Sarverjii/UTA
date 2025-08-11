@@ -1,5 +1,6 @@
 const PlayerService = require("../Services/Player.service.js");
 const Team = require("../models/Team.model.js");
+const Player = require("../models/Player.model.js");
 
 const getPlayers = async (req, res) => {
   try {
@@ -51,9 +52,26 @@ const loginPlayer = async (req, res) => {
   }
 };
 
+const getLoggedInPlayer = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const player = await Player.findById(id, "-feePaidAdmin");
+    res.status(200).json({
+      success: true,
+      message: "Player Found Successfully",
+      data: player,
+    });
+  } catch {
+    res.status(400).json({
+      success: false,
+      message: "Player Not Found",
+    });
+  }
+};
+
 const updatePlayer = async (req, res) => {
   try {
-    await PlayerService.updatePlayer(req.params.id, req.body);
+    await PlayerService.updatePlayer(req.params.id, req.body.formData);
     res.status(200).json({
       success: true,
       message: `Your Personal Details have been updated`,
@@ -80,10 +98,63 @@ const updateTeams = async (req, res) => {
     });
   }
 };
+const getPlayersWithDetails = async (req, res) => {
+  try {
+    const players = await PlayerService.getPlayersWithDetails();
+    res.status(200).json({
+      success: true,
+      message: "Fetched Players Successfully",
+      data: players,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const toggleFeeStatus = async (req, res) => {
+  try {
+    const player = await PlayerService.toggleFeeStatus(req.params.id);
+    res.status(200).json({
+      success: true,
+      message: "Fee Status Updated Successfully",
+      data: player,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const deletePlayer = async (req, res) => {
+  try {
+    const result = await PlayerService.deletePlayerAndHandleTeams(
+      req.params.id
+    );
+    res.status(200).json({
+      success: true,
+      message: result.message,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   RegisterPlayer,
   loginPlayer,
+  getLoggedInPlayer,
   updatePlayer,
   updateTeams,
   getPlayers,
+  getPlayersWithDetails,
+  toggleFeeStatus,
+  deletePlayer,
 };

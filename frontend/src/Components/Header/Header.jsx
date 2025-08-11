@@ -151,7 +151,7 @@ const Header = () => {
           {/* Desktop Navigation Links */}
           <div className={styles.navbarNav}>
             <Link to="/">Home</Link>
-            <Link to="/tournament">Tournaments</Link>
+            <Link to="/tournaments">Tournaments</Link>
             <Link to="/about">About Us</Link>
             <Link to="/joinUs">Join Us</Link>
             <Link to="/contact">Contact Us</Link>

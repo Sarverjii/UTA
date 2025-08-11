@@ -48,6 +48,7 @@ const RegisteredPlayers = () => {
   };
 
   useEffect(() => {
+    console.log("Hello");
     getPlayers();
     getEvents();
     window.scrollTo(0, 0);
@@ -77,7 +78,7 @@ const RegisteredPlayers = () => {
           </div>
         </div>
         <h2 className={styles.headerTitle}>Uttranchal Tennis Association</h2>
-        <Link to={"/"}>Back to Home</Link>
+        <Link to={"/Nissan"}>Back to Home</Link>
       </header>
 
       <main className={styles.mainContent}>

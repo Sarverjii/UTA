@@ -14,6 +14,10 @@ const eventSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    showing: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );

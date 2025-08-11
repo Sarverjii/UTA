@@ -565,4 +565,115 @@ const getMemberDetails = async (id, type) => {
 
   return memberData;
 };
-module.exports = { Register, Login, getMemberDetails };
+
+const getAllMembers = async () => {
+    const players = await Player.find();
+    const coaches = await Coach.find();
+    const academies = await Academy.find();
+    const districts = await District.find();
+    return { players, coaches, academies, districts };
+};
+
+const approveMember = async (memberId, memberType) => {
+    let Model;
+    switch (memberType) {
+        case 'Player':
+            Model = Player;
+            break;
+        case 'Coach':
+            Model = Coach;
+            break;
+        case 'Academy':
+            Model = Academy;
+            break;
+        case 'District':
+            Model = District;
+            break;
+        default:
+            throw new Error('Invalid member type');
+    }
+
+    const member = await Model.findByIdAndUpdate(
+        memberId,
+        { status: 'Verified' },
+        { new: true }
+    );
+
+    if (!member) {
+        throw new Error('Member not found');
+    }
+
+    return member;
+};
+
+const getPendingMembers = async () => {
+    const players = await Player.find({ status: { $ne: 'Verified' } });
+    const coaches = await Coach.find({ status: { $ne: 'Verified' } });
+    const academies = await Academy.find({ status: { $ne: 'Verified' } });
+    const districts = await District.find({ status: { $ne: 'Verified' } });
+    return { players, coaches, academies, districts };
+};
+
+const getVerifiedMembers = async () => {
+    const players = await Player.find({ status: 'Verified' });
+    const coaches = await Coach.find({ status: 'Verified' });
+    const academies = await Academy.find({ status: 'Verified' });
+    const districts = await District.find({ status: 'Verified' });
+    return { players, coaches, academies, districts };
+};
+
+const deleteMember = async (memberId, memberType) => {
+    let Model;
+    switch (memberType) {
+        case 'Player':
+            Model = Player;
+            break;
+        case 'Coach':
+            Model = Coach;
+            break;
+        case 'Academy':
+            Model = Academy;
+            break;
+        case 'District':
+            Model = District;
+            break;
+        default:
+            throw new Error('Invalid member type');
+    }
+    const member = await Model.findByIdAndDelete(memberId);
+    if (!member) {
+        throw new Error('Member not found');
+    }
+    return member;
+};
+
+const removeMember = async (memberId, memberType) => {
+    let Model;
+    switch (memberType) {
+        case 'Player':
+            Model = Player;
+            break;
+        case 'Coach':
+            Model = Coach;
+            break;
+        case 'Academy':
+            Model = Academy;
+            break;
+        case 'District':
+            Model = District;
+            break;
+        default:
+            throw new Error('Invalid member type');
+    }
+    const member = await Model.findByIdAndUpdate(
+        memberId,
+        { status: 'Removed' },
+        { new: true }
+    );
+    if (!member) {
+        throw new Error('Member not found');
+    }
+    return member;
+};
+
+module.exports = { Register, Login, getMemberDetails, getAllMembers, approveMember, getPendingMembers, getVerifiedMembers, deleteMember, removeMember };

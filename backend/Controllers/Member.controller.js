@@ -1,5 +1,4 @@
 const MemberServices = require("../Services/Members.service");
-const { authenticateDB } = require("../MiddleWare/authMiddleware"); // Import the new middleware
 
 const register = async (req, res) => {
   try {
@@ -77,4 +76,113 @@ const logout = (req, res) => {
   }
 };
 
-module.exports = { register, login, logout, getMe };
+const getAllMembers = async (req, res) => {
+  try {
+    const members = await MemberServices.getAllMembers();
+    res.status(200).json({
+      success: true,
+      message: "Fetched all members successfully",
+      data: members,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const approveMember = async (req, res) => {
+  try {
+    const { memberId, memberType } = req.body;
+    const member = await MemberServices.approveMember(memberId, memberType);
+    res.status(200).json({
+      success: true,
+      message: "Member approved successfully",
+      data: member,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getPendingMembers = async (req, res) => {
+  try {
+    const members = await MemberServices.getPendingMembers();
+    res.status(200).json({
+      success: true,
+      message: "Fetched pending members successfully",
+      data: members,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getVerifiedMembers = async (req, res) => {
+  try {
+    const members = await MemberServices.getVerifiedMembers();
+    res.status(200).json({
+      success: true,
+      message: "Fetched verified members successfully",
+      data: members,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const deleteMember = async (req, res) => {
+  try {
+    const { memberId, memberType } = req.body;
+    await MemberServices.deleteMember(memberId, memberType);
+    res.status(200).json({
+      success: true,
+      message: "Member deleted successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const removeMember = async (req, res) => {
+  try {
+    const { memberId, memberType } = req.body;
+    const member = await MemberServices.removeMember(memberId, memberType);
+    res.status(200).json({
+      success: true,
+      message: "Member removed successfully",
+      data: member,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = {
+  register,
+  login,
+  logout,
+  getMe,
+  getAllMembers,
+  approveMember,
+  getPendingMembers,
+  getVerifiedMembers,
+  deleteMember,
+  removeMember,
+};

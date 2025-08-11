@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Home.module.css";
 import ListItem from "../../Components/ListItem.jsx/ListItem";
+import axios from "axios";
 
 // Import icons from react-icons
 import {
@@ -15,6 +16,33 @@ import {
 } from "react-icons/fa"; // Make sure to import the new icons
 
 const Home = () => {
+  const [events, setEvents] = useState([]);
+  const [backgroundImage, setBackgroundImage] = useState("");
+
+  const backgroundImages = ["/banner.jpg", "/bannerHome.jpg", "/img1.jpg"];
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_BACKEND_URL}/api/main-events`
+        );
+        console.log(response);
+        setEvents(response.data.data.slice(0, 3)); // Get first 3 events
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    const setRandomBackgroundImage = () => {
+      const randomImage =
+        backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
+      setBackgroundImage(`url(${randomImage})`);
+    };
+
+    fetchEvents();
+    setRandomBackgroundImage();
+  }, []);
   // Data for Key Personnel
   const keyPersonnel = [
     {
@@ -37,7 +65,10 @@ const Home = () => {
   return (
     <div>
       <main>
-        <div className={styles.homeBanner}>
+        <div
+          className={styles.homeBanner}
+          style={{ backgroundImage: backgroundImage }}
+        >
           <h1>Welcome to Uttranchal Tennis Association</h1>
           <p>Promoting tennis excellence in the heart of the Himalayas.</p>
           <Link to="/tournaments">Explore Tournaments</Link>
@@ -48,22 +79,14 @@ const Home = () => {
             <h2>Upcoming Events</h2>
           </div>
           <div className={styles.upcomingEventsListContainer}>
-            {""}
-            <ListItem
-              heading="Nissan All India Open Seniors Tennis Tournament 2024"
-              description="A special Tennis Tournament only for seniors"
-              imageurl="./img2.jpg"
-            />
-            <ListItem
-              heading="Nissan All India Open Seniors Tennis Tournament 2024"
-              description="A special Tennis Tournament only for seniors"
-              imageurl="./img2.jpg"
-            />
-            <ListItem
-              heading="Nissan All India Open Seniors Tennis Tournament 2024"
-              description="A special Tennis Tournament only for seniors"
-              imageurl="./img2.jpg"
-            />
+            {events.map((event, index) => (
+              <ListItem
+                key={event._id}
+                heading={event.name}
+                description={event.description}
+                imageurl={`/img${index + 1}.jpg`}
+              />
+            ))}
           </div>
         </section>
 
