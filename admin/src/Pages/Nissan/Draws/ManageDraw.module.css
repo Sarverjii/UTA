@@ -75,23 +75,31 @@
   overflow-x: auto;
   padding: 20px;
   background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .roundContainer {
   display: flex;
   flex-direction: column;
-  justify-content: space-around; /* Distribute matches evenly */
+  justify-content: space-around;
   flex-shrink: 0;
-  margin-right: 60px; /* Space between rounds */
+  margin-right: 80px; /* Space between rounds */
   position: relative;
+  padding: 10px 0;
+}
+
+.roundContainer:last-child {
+  margin-right: 0;
 }
 
 .roundTitle {
   text-align: center;
-  font-size: 1.2em;
+  font-size: 1.3em;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   color: var(--text-dark);
+  text-transform: uppercase;
 }
 
 .matchesContainer {
@@ -101,63 +109,36 @@
   flex-grow: 1;
 }
 
-.matchContainer {
+.matchPair {
+  display: flex;
+  flex-direction: column;
   position: relative;
-  margin: 30px 0; /* Vertical space between matches */
+  margin-bottom: 40px; /* Space between match pairs */
   background-color: #fff;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 200px; /* Fixed width for match boxes */
+  border-radius: 6px;
+  width: 220px; /* Fixed width for match boxes */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-/* Connector lines */
-.matchContainer::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: -30px; /* Half of the space between rounds */
-  width: 30px; /* Same as right offset */
-  height: 2px;
-  background-color: #999;
+.matchPair:last-child {
+  margin-bottom: 0;
 }
 
-/* Don't draw line for the final match */
-.roundContainer:last-child .matchContainer::after {
-  display: none;
+.matchSlot {
+  padding: 12px 15px;
+  font-size: 0.95em;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.team {
-  padding: 10px;
-}
-
-.team:first-child {
-  border-bottom: 1px solid #ccc;
+.matchSlot:first-child {
+  border-bottom: 1px solid #eee;
 }
 
 .teamName {
-  font-size: 0.9em;
+  font-weight: 500;
 }
 
-/* Vertical connector for previous round's matches */
-.matchesContainer > .matchContainer:not(:only-child)::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -30px; /* Half of space between rounds */
-    width: 2px;
-    height: 100%;
-    background-color: #999;
-}
-
-.matchesContainer > .matchContainer:first-child::before {
-    top: 50%;
-    height: 50%;
-}
-
-.matchesContainer > .matchContainer:last-child::before {
-    height: 50%;
-}
-
-.matchesContainer > .matchContainer:only-child::before {
-    display: none;
-}

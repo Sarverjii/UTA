@@ -3,34 +3,42 @@ import api from "../../../api";
 import styles from "./ManageDraw.module.css";
 import { toast } from "sonner";
 
-const Team = ({ team }) => {
-  const teamDisplayName = team
-    ? `${team.partner1?.name || "Unknown"} ${
-        team.partner2 ? `& ${team.partner2?.name || "Unknown"}` : ""
-      }`
-    : "TBD";
-
-  return <div className={styles.teamName}>{teamDisplayName}</div>;
-};
-
-const Match = ({ match }) => {
-  if (!match) return null;
+const Match = ({ team, isWinnerSlot = false, roundIndex }) => {
+  let teamDisplayName;
+  if (isWinnerSlot) {
+    teamDisplayName = "Winner";
+  } else if (!team) {
+    teamDisplayName = roundIndex === 0 ? "BYE" : "TBD";
+  } else {
+    teamDisplayName = `${team.partner1?.name || "Unknown"} ${
+      team.partner2 ? `& ${team.partner2?.name || "Unknown"}` : ""
+    }`;
+  }
 
   return (
-    <div className={styles.matchContainer}>
-        <div className={styles.team}><Team team={match.Team1} /></div>
-        <div className={styles.team}><Team team={match.Team2} /></div>
+    <div className={styles.matchSlot}>
+      <div className={styles.teamName}>{teamDisplayName}</div>
     </div>
   );
 };
 
-const Round = ({ title, matches }) => {
+const Round = ({ title, matches, roundIndex, totalRounds }) => {
+  const isLastRound = roundIndex === totalRounds - 1;
+
   return (
     <div className={styles.roundContainer}>
       <h2 className={styles.roundTitle}>{title}</h2>
       <div className={styles.matchesContainer}>
-        {matches.map((match) => (
-          <Match key={match._id} match={match} />
+        {matches.map((match, matchIndex) => (
+          <React.Fragment key={match._id || `match-${roundIndex}-${matchIndex}`}>
+            <div className={styles.matchPair}>
+              <Match team={match.Team1} roundIndex={roundIndex} />
+              <Match team={match.Team2} roundIndex={roundIndex} />
+            </div>
+            {!isLastRound && (
+              <div className={styles.connectorLine}></div>
+            )}
+          </React.Fragment>
         ))}
       </div>
     </div>
@@ -147,6 +155,7 @@ const ManageDraw = () => {
   };
 
   const rounds = buildRounds(draws);
+  const totalRounds = rounds.length;
 
   return (
     <div className={styles.manageDrawContainer}>
@@ -189,8 +198,14 @@ const ManageDraw = () => {
 
       {draws.length > 0 && (
         <div className={styles.bracketContainer}>
-          {rounds.map((round) => (
-            <Round key={round.title} title={round.title} matches={round.matches} />
+          {rounds.map((round, roundIndex) => (
+            <Round
+              key={round.title}
+              title={round.title}
+              matches={round.matches}
+              roundIndex={roundIndex}
+              totalRounds={totalRounds}
+            />
           ))}
         </div>
       )}
