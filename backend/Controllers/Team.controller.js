@@ -22,7 +22,8 @@ exports.updateTeamRanking = async (req, res) => {
 
 exports.getAllTeams = async (req, res) => {
   try {
-    const teams = await getAllTeamsService(req.params.id);
+    const { eventId } = req.query; // Get eventId from query parameters
+    const teams = await getAllTeamsService(eventId);
     res.status(200).json({ success: true, data: teams });
   } catch (error) {
     res.status(500).json({

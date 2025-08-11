@@ -90,7 +90,45 @@ const UpdateTeamRanking = () => {
     const teamsForEvent = allTeams
       .filter((t) => t.eventId.name === selectedEvent)
       .sort((a, b) => a.rank - b.rank);
-    setFilteredTeams(teamsForEvent);
+
+    let ranksChanged = false;
+    const correctedTeams = teamsForEvent.map((team, index) => {
+      const newRank = index + 1;
+      if (team.rank !== newRank) {
+        ranksChanged = true;
+      }
+      return { ...team, rank: newRank };
+    });
+
+    const updateRanks = async (teams) => {
+      const orderedTeamIds = teams.map((t) => t._id);
+      try {
+        await api.put(
+          "http://localhost:3000/api/team/update-ranking",
+          { orderedTeams: orderedTeamIds },
+          { withCredentials: true }
+        );
+
+        // Update the main list to maintain consistency
+        const newAllTeams = allTeams.map((team) => {
+          const updatedTeam = teams.find(
+            (ut) => ut._id === team._id
+          );
+          return updatedTeam || team;
+        });
+        setAllTeams(newAllTeams);
+      } catch (error) {
+        console.error("Error updating team ranking:", error);
+        fetchAllTeams(); // Re-fetch to revert
+      }
+    };
+
+    if (ranksChanged) {
+      setFilteredTeams(correctedTeams);
+      updateRanks(correctedTeams);
+    } else {
+      setFilteredTeams(teamsForEvent);
+    }
   }, [selectedEvent, allTeams]);
 
   const handleDragEnd = async (event) => {

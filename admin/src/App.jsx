@@ -8,10 +8,10 @@ import Members from "./Pages/Members/Members";
 import Events from "./Pages/Events/Events";
 import Approvals from "./Pages/Approvals/Approvals";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import Nissan from "./Pages/Nissan/Nissan";
+import Nissan from "./Pages/Nissan/Settings";
 import UpdateTeamRanking from "./Pages/Nissan/Ranking/UpdateTeamRanking";
 import ViewPlayerList from "./Pages/Nissan/Players/ViewPlayerList";
-import ManageDraw from "./Pages/Nissan/ManageDraw";
+import ManageDraw from "./Pages/Nissan/Draws/ManageDraw";
 import ManageResult from "./Pages/Nissan/ManageResult";
 import UpdateEvents from "./Pages/Nissan/UpdateEvents/UpdateEvents";
 

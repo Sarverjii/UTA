@@ -38,26 +38,20 @@ const Nissan_Login = () => {
   };
 
   return (
-    <div className={styles.loginPage}>
+    <div>
       <header className={styles.header}>
-        <div className={styles.headerLogoGroup}>
-          <div className={styles.logoIcon}>
+        <div className={styles.headerLeft}>
+          <div className={styles.logoWrapper}>
             <img src="/logo.png" alt="UTA LOGO" />
-            <h2 className={styles.headerTitle}>
-              Uttranchal Tennis Association
-            </h2>
           </div>
+          <h1 className={styles.title}>Uttranchal Tennis Association</h1>
         </div>
-        <div className={styles.headerNavActions}>
-          <div className={styles.headerButtons}>
-            <Link to="/Nissan" className={styles.backButton}>
-              <span className={styles.buttonText}>Back to Home</span>
-            </Link>
-          </div>
+        <div className={styles.headerRight}>
+          <Link to="/Nissan">Back to Home</Link>
         </div>
       </header>
 
-      <main className={styles.loginContainer}>
+      <section className={styles.formContainer}>
         <form className={styles.loginForm} onSubmit={loginHandler}>
           <h2 className={styles.formTitle}>Player Login</h2>
           <p className={styles.formSubtitle}>
@@ -106,7 +100,7 @@ const Nissan_Login = () => {
             </Link>
           </p>
         </form>
-      </main>
+      </section>
     </div>
   );
 };

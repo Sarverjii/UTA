@@ -272,15 +272,14 @@ const LoginPage2 = ({
   };
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.heading}>Update Your Events</h2>
-
-      <div className={styles.formGroup}>
-        <label htmlFor="event1">Choose Event 1</label>
+    <div className={styles.loginPage2Container}>
+      <section className={styles.formSection}>
+        <label htmlFor="event1" className={styles.label}>Choose Event 1</label>
         <select
           id="event1"
           value={formData.event1 || ""} // Ensure value is "" for default option
           onChange={(e) => setEvent1(e.target.value || null)}
+          className={styles.select}
         >
           <option value="">-- Select an Event --</option>
           {events.map((event) => (
@@ -290,10 +289,10 @@ const LoginPage2 = ({
           ))}
         </select>
         {errors.event1 && <div className={styles.error}>{errors.event1}</div>}
-      </div>
+      </section>
 
-      <div className={styles.formGroup}>
-        <label htmlFor="partner1">Partner for Event 1</label>
+      <section className={styles.formSection}>
+        <label htmlFor="partner1" className={styles.label}>Partner for Event 1</label>
         <select
           id="partner1"
           value={formData.partner1 || ""} // CORRECTED: Bind directly to formData.partner1
@@ -303,6 +302,7 @@ const LoginPage2 = ({
               partner1: e.target.value || null,
             })
           }
+          className={styles.select}
         >
           <option value="">Partner Not Registered</option>
           {playerEvent1List.map((p) => (
@@ -311,14 +311,15 @@ const LoginPage2 = ({
             </option>
           ))}
         </select>
-      </div>
+      </section>
 
-      <div className={styles.formGroup}>
-        <label htmlFor="event2">Choose Event 2</label>
+      <section className={styles.formSection}>
+        <label htmlFor="event2" className={styles.label}>Choose Event 2</label>
         <select
           id="event2"
           value={formData.event2 || ""} // Ensure value is "" for default option
           onChange={(e) => setEvent2(e.target.value || null)}
+          className={styles.select}
         >
           <option value="">-- Select an Event --</option>
           {event2List.map((event) => (
@@ -327,11 +328,11 @@ const LoginPage2 = ({
             </option>
           ))}
         </select>
-      </div>
+      </section>
 
       {isEvent2Selected && (
-        <div className={styles.formGroup}>
-          <label htmlFor="partner2">Partner for Event 2</label>
+        <section className={styles.formSection}>
+          <label htmlFor="partner2" className={styles.label}>Partner for Event 2</label>
           <select
             id="partner2"
             value={formData.partner2 || ""} // Ensure value is "" for default option
@@ -341,6 +342,7 @@ const LoginPage2 = ({
                 partner2: e.target.value || null,
               })
             }
+            className={styles.select}
           >
             <option value="">Partner Not Registered</option>
             {playerEvent2List.map((p) => (
@@ -349,7 +351,7 @@ const LoginPage2 = ({
               </option>
             ))}
           </select>
-        </div>
+        </section>
       )}
 
       <div className={styles.buttonGroup}>

@@ -1,65 +1,61 @@
-.container {
-  background-color: var(--background-card);
-  padding: var(--spacing-xl);
-  border-radius: var(--border-radius-lg);
-  box-shadow: 0 2px 4px var(--shadow-color);
-  margin: var(--spacing-xl) auto;
-  max-width: 600px;
+/* LoginPage2.module.css */
+
+.loginPage2Container {
+  padding: var(--spacing-lg);
 }
 
-.heading {
-  font-size: var(--font-size-2xl);
-  margin-bottom: var(--spacing-lg);
-  color: var(--text-dark);
-  text-align: center;
-}
-
-.formGroup {
+.formSection {
   margin-bottom: var(--spacing-md);
-  display: flex;
-  flex-direction: column;
 }
 
-label {
-  font-size: var(--font-size-base);
+.label {
+  display: block;
   margin-bottom: var(--spacing-xs);
+  font-weight: bold;
   color: var(--text-dark);
-}
-
-select {
-  padding: var(--spacing-sm);
-  border-radius: var(--border-radius-md);
-  border: 1px solid var(--border-color);
   font-size: var(--font-size-base);
-  background-color: var(--background-light);
 }
 
-select:focus {
+.select {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-base);
+  color: var(--text-dark);
+  transition: border-color var(--transition-speed-fast) var(--transition-ease);
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23333333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right var(--spacing-sm) center;
+  background-size: 20px;
+  padding-right: var(--spacing-xl);
+}
+
+.select:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
-.error {
-  margin-top: var(--spacing-xs);
-  color: var(--danger-color);
-  font-size: var(--font-size-sm);
-}
-
 .buttonGroup {
-  margin-top: var(--spacing-lg);
   display: flex;
   justify-content: space-between;
+  margin-top: var(--spacing-xl);
 }
 
 .primaryButton,
 .secondaryButton {
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-size: var(--font-size-base);
+  padding: var(--spacing-sm) var(--spacing-lg);
   border: none;
   border-radius: var(--border-radius-md);
-  transition: background-color var(--transition-speed-normal) var(--transition-ease);
+  font-size: var(--font-size-base);
   cursor: pointer;
+  transition: background-color var(--transition-speed-normal) var(--transition-ease);
+  min-width: 120px;
 }
 
 .primaryButton {
@@ -72,10 +68,17 @@ select:focus {
 }
 
 .secondaryButton {
-  background-color: var(--secondary-color);
-  color: var(--text-light);
+  background-color: #e0e0e0;
+  color: #222;
 }
 
 .secondaryButton:hover {
-  background-color: #76b852;
+  background-color: #c9c9c9;
+}
+
+.error {
+  font-size: var(--font-size-sm);
+  color: var(--danger-color);
+  margin-top: var(--spacing-xs);
+  display: block;
 }

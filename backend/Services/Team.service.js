@@ -11,9 +11,13 @@ exports.updateTeamRankingService = async (orderedTeams) => {
   }
 };
 
-exports.getAllTeamsService = async () => {
+exports.getAllTeamsService = async (eventId = null) => {
   try {
-    const teams = await Team.find({})
+    let query = {};
+    if (eventId) {
+      query.eventId = eventId;
+    }
+    const teams = await Team.find(query)
       .populate({ path: "partner1", select: "name" })
       .populate({ path: "partner2", select: "name" })
       .populate({ path: "eventId", select: "name" })

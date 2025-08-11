@@ -1,0 +1,163 @@
+/* ManageDraw.module.css */
+
+.manageDrawContainer {
+  padding: var(--spacing-lg);
+}
+
+.eventFilterButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.filterButton {
+  background-color: var(--background-card);
+  color: var(--text-dark);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.filterButton:hover {
+  background-color: var(--hover-light);
+}
+
+.filterButton.active {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border-color: var(--primary-color);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.drawButton, .deleteDrawButton {
+  color: var(--text-light);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition: background-color var(--transition-speed-normal) var(--transition-ease);
+}
+
+.drawButton {
+  background-color: var(--primary-color);
+}
+
+.drawButton:hover {
+  background-color: var(--hover-dark);
+}
+
+.deleteDrawButton {
+  background-color: var(--danger-color);
+}
+
+.deleteDrawButton:hover {
+  background-color: #b30000; /* Darker red */
+}
+
+.drawButton:disabled, .deleteDrawButton:disabled {
+  background-color: var(--border-color);
+  cursor: not-allowed;
+}
+
+/* Bracket Styles */
+.bracketContainer {
+  display: flex;
+  overflow-x: auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.roundContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around; /* Distribute matches evenly */
+  flex-shrink: 0;
+  margin-right: 60px; /* Space between rounds */
+  position: relative;
+}
+
+.roundTitle {
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: var(--text-dark);
+}
+
+.matchesContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-grow: 1;
+}
+
+.matchContainer {
+  position: relative;
+  margin: 30px 0; /* Vertical space between matches */
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px; /* Fixed width for match boxes */
+}
+
+/* Connector lines */
+.matchContainer::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -30px; /* Half of the space between rounds */
+  width: 30px; /* Same as right offset */
+  height: 2px;
+  background-color: #999;
+}
+
+/* Don't draw line for the final match */
+.roundContainer:last-child .matchContainer::after {
+  display: none;
+}
+
+.team {
+  padding: 10px;
+}
+
+.team:first-child {
+  border-bottom: 1px solid #ccc;
+}
+
+.teamName {
+  font-size: 0.9em;
+}
+
+/* Vertical connector for previous round's matches */
+.matchesContainer > .matchContainer:not(:only-child)::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -30px; /* Half of space between rounds */
+    width: 2px;
+    height: 100%;
+    background-color: #999;
+}
+
+.matchesContainer > .matchContainer:first-child::before {
+    top: 50%;
+    height: 50%;
+}
+
+.matchesContainer > .matchContainer:last-child::before {
+    height: 50%;
+}
+
+.matchesContainer > .matchContainer:only-child::before {
+    display: none;
+}

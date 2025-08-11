@@ -665,12 +665,18 @@ const updateTeams = async (id, data) => {
         }
 
         // Check if the current team structure matches the *desired* structure
-        const isCurrentTeamMatch =
-          (isPlayerPartner1 &&
-            (!targetPartnerId ||
-              currentTeam.partner2?.toString() === targetPartnerId)) || // Player is P1, and new partner is current P2 OR new partner is null (solo)
-          (isPlayerPartner2 &&
-            currentTeam.partner1?.toString() === targetPartnerId); // Player is P2, and new partner is current P1
+        let isCurrentTeamMatch = false;
+        if (isPlayerPartner1) {
+            const oldPartnerId = currentTeam.partner2 ? currentTeam.partner2.toString() : null;
+            if (oldPartnerId === (targetPartnerId || null)) {
+                isCurrentTeamMatch = true;
+            }
+        } else if (isPlayerPartner2) {
+            const oldPartnerId = currentTeam.partner1 ? currentTeam.partner1.toString() : null;
+            if (oldPartnerId === (targetPartnerId || null)) {
+                isCurrentTeamMatch = true;
+            }
+        }
 
         if (isCurrentTeamMatch) {
           // If the team structure for this event hasn't fundamentally changed, skip processing it here.

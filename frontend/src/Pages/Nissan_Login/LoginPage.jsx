@@ -101,10 +101,11 @@ const LoginPage = () => {
   return (
     <div>
       <header className={styles.header}>
-        <div className={styles.headerLogoGroup}>
-          <div className={styles.logoIcon}>
+        <div className={styles.headerLeft}>
+          <div className={styles.logoWrapper}>
             <img src="/logo.png" alt="UTA LOGO" />
           </div>
+          <h1 className={styles.title}>Uttranchal Tennis Association</h1>
         </div>
         <div className={styles.headerRight}>
           <Link to="/Nissan">Back to Home</Link>

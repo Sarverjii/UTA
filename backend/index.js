@@ -16,6 +16,7 @@ const EventRouter = require("./Route/Event.route.js");
 const MainEventRouter = require("./Route/MainEvent.route.js");
 const AdminRouter = require("./Route/Admin.route.js");
 const TeamRouter = require("./Route/Team.route.js");
+const NissanDrawsRouter = require("./Route/Nissan_Draws.route.js");
 
 //Player APIs
 app.use("/api/player/", PlayerRouter);
@@ -29,6 +30,7 @@ app.use("/api/admin/", AdminRouter);
 
 app.use("/api/member/", MemberRouter);
 app.use("/api/team/", TeamRouter);
+app.use("/api/nissan-draws/", NissanDrawsRouter);
 
 // Starting the Server
 const PORT_NUMBER = process.env.PORT_NUMBER || 3000;
