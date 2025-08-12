@@ -1,6 +1,6 @@
 const express = require("express");
 const MainEventController = require("../Controllers/MainEvent.controller.js");
-const { isAdmin } = require("../Middleware/authMiddleware.js");
+const { isAdmin } = require("../MiddleWare/authMiddleware.js");
 
 const router = express.Router();
 
