@@ -131,15 +131,15 @@ exports.updateDraw = async (drawId, updateData) => {
     console.log(`[Backend UpdateDraw] updatedDraw result:`, updatedDraw);
 
     // --- Winner Propagation Logic ---
-    if (updatedDraw && updatedDraw.Winner) { // Check if a winner was set for the current match
+    // Check if a winner was set OR UNSET for the current match
+    if (updatedDraw) { // Ensure the match was found and updated
       const currentMatch = updatedDraw;
       const currentMatchNumber = currentMatch.Match_number;
       const currentStage = currentMatch.Stage;
-      const winnerId = currentMatch.Winner;
       const eventId = currentMatch.Event;
 
-      console.log(`[Backend] Propagating winner for match ${currentMatch._id} (Match_number: ${currentMatchNumber}, Stage: ${currentStage})`);
-      console.log(`[Backend] Winner ID: ${winnerId}`);
+      console.log(`[Backend] Processing match ${currentMatch._id} (Match_number: ${currentMatchNumber}, Stage: ${currentStage})`);
+      console.log(`[Backend] Current Winner ID: ${currentMatch.Winner}`);
 
       // Determine the next stage (e.g., "Round 1" -> "Round 2")
       const currentRoundNumber = parseInt(currentStage.replace("Round ", ""));
@@ -163,13 +163,37 @@ exports.updateDraw = async (drawId, updateData) => {
 
       if (nextMatch) {
         console.log(`[Backend] Found next match: ${nextMatch._id} (Stage: ${nextMatch.Stage}, Match_number: ${nextMatch.Match_number})`);
-        // Update the next match's slot with the winner's ID
-        const updateNextMatchData = {
-          [slotType]: winnerId,
-        };
-        await Nissan_Draws.findByIdAndUpdate(nextMatch._id, updateNextMatchData);
-        console.log(`[Backend] Updated next match ${nextMatch._id} with winner ${winnerId} in slot ${slotType}`);
 
+        if (currentMatch.Winner) { // Winner was set for currentMatch, propagate it
+          const winnerId = currentMatch.Winner;
+          const updateNextMatchData = {
+            [slotType]: winnerId,
+          };
+          await Nissan_Draws.findByIdAndUpdate(nextMatch._id, updateNextMatchData);
+          console.log(`[Backend] Updated next match ${nextMatch._id} with winner ${winnerId} in slot ${slotType}`);
+        } else { // Winner was unset for currentMatch, so clear the next match's slot
+          console.log(`[Backend] Winner unset for match ${currentMatch._id}. Clearing slot in next match ${nextMatch._id}.`);
+          const clearNextMatchData = {
+            [slotType]: null, // Set the slot to null
+          };
+          await Nissan_Draws.findByIdAndUpdate(nextMatch._id, clearNextMatchData);
+
+          // Recursively clear subsequent matches if they become empty
+          // If the nextMatch had a winner, and that winner was the team we just cleared from its slot,
+          // then clear the winner of nextMatch. This will trigger a cascade.
+          // We need to check if nextMatch.Winner is the ID of the team that was just cleared.
+          // The team that was just cleared from the slot is the one that was previously in that slot.
+          // This is tricky with findByIdAndUpdate.
+
+          // A simpler recursive clear:
+          // If the nextMatch's winner is the team that was just cleared from its slot,
+          // then clear the nextMatch's winner and status.
+          // This will trigger a recursive call to updateDraw for the next match.
+          const clearedTeamId = nextMatch[slotType]; // This is the team that *was* in the slot before we set it to null
+          if (clearedTeamId && nextMatch.Winner && nextMatch.Winner.toString() === clearedTeamId.toString()) {
+              await exports.updateDraw(nextMatch._id, { Winner: null, Status: "Upcoming" });
+          }
+        }
       } else {
         console.log(`[Backend] Next match not found for Stage: ${nextStage}, Match_number: ${nextMatchNumber}`);
       }

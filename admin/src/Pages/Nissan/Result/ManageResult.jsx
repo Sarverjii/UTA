@@ -48,6 +48,11 @@ const Match = ({
     if (matchWinnerId) { // A winner is already set for this match
       if (team._id === matchWinnerId) {
         // Clicking on the current winner: unselect winner
+        // BLOCK DESELECTING IF OPPONENT WAS A BYE
+        if (opponentTeam === null) { // If opponent was a BYE
+          toast.error("Cannot deselect winner for BYE matches.");
+          return; // Block the deselection
+        }
         newWinnerId = null;
         newStatus = "Upcoming"; // Or "In Progress" depending on desired behavior
       } else {
@@ -88,11 +93,10 @@ const Match = ({
               onScoreChange(matchId, slotType, e.target.value); // Pass score change up to Round's local state
             }}
             onBlur={() => { // New onBlur handler
-              // Only save if this match is not yet completed (winner selected)
-              if (!matchWinnerId) { // Simplified condition
-                onScoreSave(matchId, slotType, displayScore); // Trigger save to backend
-              }
+              // Allow score changes even if winner is decided
+              onScoreSave(matchId, slotType, displayScore); // Trigger save to backend
             }}
+            onClick={(e) => e.stopPropagation()} // <--- Add this line
             className={styles.teamScoreInput}
           />
         )}
@@ -130,8 +134,10 @@ const Round = memo(
 
     // Handler for saving score to backend (onBlur from Match component)
     const handleScoreSave = useCallback(async (matchId, slotType, newScore) => {
+      console.log(`[Frontend Round] handleScoreSave called for matchId: ${matchId}, slotType: ${slotType}, newScore: ${newScore}`);
       // Get the current scores for this match from the state
       const currentScoresForMatch = matchScores[matchId];
+      console.log(`[Frontend Round] currentScoresForMatch (before update):`, currentScoresForMatch);
 
       let team1Score = currentScoresForMatch.Team1;
       let team2Score = currentScoresForMatch.Team2;
@@ -142,12 +148,14 @@ const Round = memo(
       } else if (slotType === "Team2") {
         team2Score = newScore;
       }
+      console.log(`[Frontend Round] team1Score: ${team1Score}, team2Score: ${team2Score}`);
 
       // Concatenate the scores
       const concatenatedScore = `${team1Score || ""} + ${team2Score || ""}`;
+      console.log(`[Frontend Round] Concatenated Score: "${concatenatedScore}"`);
 
       // Call parent's onUpdateMatch to save to backend
-      await onUpdateMatch(matchId, { Score: concatenatedScore });
+      await onUpdateMatch(matchId, { Score: concatenatedScore }, false); // Pass false for shouldRefetch
 
       // Optionally, update local state after successful save if needed,
       // but the main goal here is to send to backend.
@@ -159,7 +167,7 @@ const Round = memo(
     const handleUpdateMatchWithScore = useCallback(async (matchId, updateData) => {
       const currentMatchScores = matchScores[matchId];
       const concatenatedScore = `${currentMatchScores.Team1 || ""} + ${currentMatchScores.Team2 || ""}`;
-      await onUpdateMatch(matchId, { ...updateData, Score: concatenatedScore });
+      await onUpdateMatch(matchId, { ...updateData, Score: concatenatedScore }, true); // Explicitly pass true for shouldRefetch
     }, [matchScores, onUpdateMatch]);
 
 
@@ -281,7 +289,7 @@ const ManageResult = () => {
     fetchDraws();
   }, [selectedEvent]);
 
-  const handleUpdateMatch = useCallback(async (matchId, updateData) => {
+  const handleUpdateMatch = useCallback(async (matchId, updateData, shouldRefetch = true) => { // Added shouldRefetch
     try {
       const response = await api.put(
         // Capture response to get updated data
@@ -291,11 +299,33 @@ const ManageResult = () => {
       );
       toast.success("Match updated successfully!");
 
-      // --- This is the re-fetch ---
-      await fetchDraws(); // Re-fetch all draws to get propagated winners
+      if (shouldRefetch) { // Only refetch if explicitly told to
+        await fetchDraws(); // Re-fetch all draws to get propagated winners
+      } else {
+        // If not refetching, update local state with the response data for the current match
+        setDraws((prevDraws) =>
+          prevDraws.map((draw) => {
+            if (draw._id === matchId) {
+              const updatedDrawData = response.data.data;
+              let newWinner = updatedDrawData.Winner; // Store the ID directly
 
-      // Removed the local state update logic here.
-      // The fetchDraws() call will update the state with the latest data from the backend.
+              return {
+                ...draw, // Keep all existing fields
+                Score:
+                  updatedDrawData.Score !== undefined
+                    ? updatedDrawData.Score
+                    : draw.Score,
+                Status:
+                  updatedDrawData.Status !== undefined
+                    ? updatedDrawData.Status
+                    : draw.Status,
+                Winner: newWinner,
+              };
+            }
+            return draw;
+          })
+        );
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to update match.");
       console.error("Error updating match:", error);
