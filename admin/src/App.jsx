@@ -12,7 +12,7 @@ import Nissan from "./Pages/Nissan/Settings";
 import UpdateTeamRanking from "./Pages/Nissan/Ranking/UpdateTeamRanking";
 import ViewPlayerList from "./Pages/Nissan/Players/ViewPlayerList";
 import ManageDraw from "./Pages/Nissan/Draws/ManageDraw";
-import ManageResult from "./Pages/Nissan/ManageResult";
+import ManageResult from "./Pages/Nissan/Result/ManageResult";
 import UpdateEvents from "./Pages/Nissan/UpdateEvents/UpdateEvents";
 
 import { Toaster } from "sonner";

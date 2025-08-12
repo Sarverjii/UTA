@@ -10,7 +10,7 @@ import {
   useSensors,
   useSensor,
 } from "@dnd-kit/core";
-import { TouchSensor } from "@dnd-kit/core";
+import { TouchSensor, PointerSensor } from "@dnd-kit/core";
 
 const Match = ({
   team,
@@ -303,7 +303,10 @@ const ManageDraw = () => {
   const rounds = buildRounds(draws);
   const totalRounds = rounds.length;
 
-  const sensors = useSensors(useSensor(TouchSensor));
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(TouchSensor)
+  );
 
   return (
     <div className={styles.manageDrawContainer}>
