@@ -45,31 +45,57 @@ exports.createDrawforEvent = async (eventId) => {
       // Skip match if both are empty
       if (teamA === null && teamB === null) continue;
 
+      let winner = null;
+      let status = "Upcoming"; // Default status
+
+      if (teamA && teamB === null) { // Team A is playing a BYE
+        winner = teamA;
+        status = "Completed";
+      } else if (teamB && teamA === null) { // Team B is playing a BYE
+        winner = teamB;
+        status = "Completed";
+      }
+
       matches.push({
         Event: eventId,
         Stage: "Round 1",
         Match_number: matchNum++,
         Team1: teamA,
         Team2: teamB,
+        Winner: winner, // Set winner for BYE matches
+        Status: status,
       });
+      console.log(`[Backend Create] Round 1 Match: ${matches[matches.length - 1].Match_number}`);
     }
 
     // --- Create subsequent rounds with null teams ---
     let numMatchesInNextRound = bracketSize / 4; // Matches in Round 2
     for (let round = 2; round <= numRounds; round++) {
+      let roundMatchNum = 1; // Reset match number for each new round
       for (let i = 0; i < numMatchesInNextRound; i++) {
         matches.push({
           Event: eventId,
           Stage: `Round ${round}`,
-          Match_number: matchNum++,
+          Match_number: roundMatchNum++,
           Team1: null,
           Team2: null,
         });
+        console.log(`[Backend Create] Round ${round} Match: ${matches[matches.length - 1].Match_number}`);
       }
       numMatchesInNextRound /= 2;
     }
 
-    await Nissan_Draws.insertMany(matches);
+    const insertedMatches = await Nissan_Draws.insertMany(matches);
+
+    // --- Propagate winners for BYE matches immediately after creation ---
+    // Iterate through the insertedMatches to get the _id
+    for (const match of insertedMatches) { // Use insertedMatches here
+      if (match.Winner && match.Status === "Completed") {
+        console.log(`[Backend Create] Propagating BYE winner for match ID: ${match._id}, Winner ID: ${match.Winner}`);
+        await exports.updateDraw(match._id, { Winner: match.Winner, Status: "Completed" });
+      }
+    }
+
     return { message: "Draws created successfully." };
   } catch (error) {
     throw new Error(error.message);
@@ -96,11 +122,59 @@ exports.getDrawsByEvent = async (eventId) => {
 
 exports.updateDraw = async (drawId, updateData) => {
   try {
+    console.log(`[Backend UpdateDraw] Called for drawId: ${drawId}, updateData:`, updateData);
     const updatedDraw = await Nissan_Draws.findByIdAndUpdate(
       drawId,
       updateData,
       { new: true }
     );
+    console.log(`[Backend UpdateDraw] updatedDraw result:`, updatedDraw);
+
+    // --- Winner Propagation Logic ---
+    if (updatedDraw && updatedDraw.Winner) { // Check if a winner was set for the current match
+      const currentMatch = updatedDraw;
+      const currentMatchNumber = currentMatch.Match_number;
+      const currentStage = currentMatch.Stage;
+      const winnerId = currentMatch.Winner;
+      const eventId = currentMatch.Event;
+
+      console.log(`[Backend] Propagating winner for match ${currentMatch._id} (Match_number: ${currentMatchNumber}, Stage: ${currentStage})`);
+      console.log(`[Backend] Winner ID: ${winnerId}`);
+
+      // Determine the next stage (e.g., "Round 1" -> "Round 2")
+      const currentRoundNumber = parseInt(currentStage.replace("Round ", ""));
+      const nextRoundNumber = currentRoundNumber + 1;
+      const nextStage = `Round ${nextRoundNumber}`;
+
+      // Calculate the next match number
+      const nextMatchNumber = Math.ceil(currentMatchNumber / 2);
+
+      // Determine the winner's slot in the next match
+      const slotType = currentMatchNumber % 2 !== 0 ? "Team1" : "Team2"; // Odd -> Team1, Even -> Team2
+
+      console.log(`[Backend] Next Stage: ${nextStage}, Next Match Number: ${nextMatchNumber}, Slot Type: ${slotType}`);
+
+      // Find the next match
+      const nextMatch = await Nissan_Draws.findOne({
+        Event: eventId,
+        Stage: nextStage,
+        Match_number: nextMatchNumber,
+      });
+
+      if (nextMatch) {
+        console.log(`[Backend] Found next match: ${nextMatch._id} (Stage: ${nextMatch.Stage}, Match_number: ${nextMatch.Match_number})`);
+        // Update the next match's slot with the winner's ID
+        const updateNextMatchData = {
+          [slotType]: winnerId,
+        };
+        await Nissan_Draws.findByIdAndUpdate(nextMatch._id, updateNextMatchData);
+        console.log(`[Backend] Updated next match ${nextMatch._id} with winner ${winnerId} in slot ${slotType}`);
+
+      } else {
+        console.log(`[Backend] Next match not found for Stage: ${nextStage}, Match_number: ${nextMatchNumber}`);
+      }
+    }
+
     return updatedDraw;
   } catch (error) {
     throw new Error(error.message);

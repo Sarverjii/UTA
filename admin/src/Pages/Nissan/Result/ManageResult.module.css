@@ -53,7 +53,7 @@
   flex-direction: column;
   justify-content: space-around;
   flex-shrink: 0;
-  margin-right: 80px; /* Space between rounds */
+  margin-right: 60px; /* Reduced space between rounds */
   position: relative;
   padding: 10px 0;
 }
@@ -82,11 +82,11 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-bottom: 40px; /* Space between match pairs */
-  background-color: #fff;
+  margin-bottom: 30px; /* Reduced space between match pairs */
+  background-color: #e0e0e029;
   border: 1px solid #ccc;
   border-radius: 6px;
-    width: 280px; /* Increased width to accommodate score input */
+  width: 320px; /* Increased width */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
@@ -98,14 +98,16 @@
   padding: 12px 15px;
   font-size: 0.95em;
   color: var(--text-dark);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Removed white-space: nowrap; */
+  overflow: hidden; /* Keep overflow hidden for the slot itself */
+  text-overflow: ellipsis; /* Keep ellipsis for the slot itself */
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background-color: var(--background-card); /* Added background */
+  justify-content: center; /* Changed from space-between */
+  gap: 15px; /* Added gap for spacing between elements */
+  background-color: #ffffff; /* Added very light gray background */
   border-radius: var(--border-radius-sm); /* Added border-radius */
+  cursor: pointer; /* Added cursor: pointer; */
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out; /* Added transition */
 }
 
@@ -120,7 +122,27 @@
 }
 
 .teamName {
-  font-weight: 500;
+  font-weight: 700;
+  font-size: 1.1em; /* Reduced slightly */
+  text-align: center;
+  color: var(--text-dark);
+  text-transform: uppercase; /* Added */
+  letter-spacing: 0.05em;
+  /* Removed background-color: #f0f0f0; */
+  padding: 5px 0;
+  border-radius: var(--border-radius-sm, 4px);
+  white-space: normal; /* Allow wrapping */
+  transition: background-color 0.2s ease-in-out; /* Smooth transition */
+}
+
+.matchSlot.winner { /* Changed from .teamName.winner */
+  background-color: #e6ffe6; /* Very light green */
+  border: 1px solid #8cff8c; /* Subtle green border */
+}
+
+.matchSlot.loser { /* Changed from .teamName.loser */
+  background-color: #ffe6e6; /* Very light red */
+  border: 1px solid #ff8c8c; /* Subtle red border */
 }
 
 .matchNumber {
@@ -192,4 +214,32 @@
   background-position: right 5px center;
   background-size: 8px;
   padding-right: 20px; /* Make space for the arrow */
+}
+
+.teamScoreInput {
+  width: 60px; /* Adjust width as needed */
+  padding: 6px 8px;
+  border: 1px solid var(--border-color, #ccc); /* Use CSS variable if available, fallback to #ccc */
+  border-radius: var(--border-radius-sm, 4px); /* Use CSS variable if available, fallback to 4px */
+  font-size: 0.85em;
+  text-align: center;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  outline: none; /* Remove default outline */
+}
+
+.teamScoreInput:focus {
+  border-color: var(--primary-color, #007bff); /* Highlight on focus */
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); /* Subtle glow */
+}
+
+.teamScoreInput::placeholder {
+  color: #aaa;
+}
+
+.vsSeparator {
+  text-align: center;
+  font-weight: bold;
+  margin: 8px 0; /* Adjusted vertical spacing */
+  color: var(--text-dark);
+  font-size: 0.9em;
 }

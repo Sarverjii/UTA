@@ -8,7 +8,13 @@ const Match = ({
   isWinnerSlot = false,
   roundIndex,
   matchId,
-  slotType,
+  slotType, // "Team1" or "Team2"
+  opponentTeam,
+  onUpdateMatch,
+  matchWinnerId,
+  onScoreChange, // New prop
+  initialScore, // New prop
+  onScoreSave, // New prop for saving score to backend
 }) => {
   let teamDisplayName;
   if (isWinnerSlot) {
@@ -21,21 +27,73 @@ const Match = ({
     }`;
   }
 
-  // This input will be purely visual for individual team scores, not directly updating match.Score
-  // The actual match.Score update will happen in the Round component's score input.
-  const [displayScore, setDisplayScore] = useState(""); // Local state for display
+  const [displayScore, setDisplayScore] = useState(initialScore || ""); // Initialize with initialScore
+
+  useEffect(() => {
+    setDisplayScore(initialScore || ""); // Update if initialScore changes
+  }, [initialScore]);
+
+  // Determine if this team is the winner or loser
+  const isWinner = team && matchWinnerId && team._id === matchWinnerId;
+  const isLoser = team && matchWinnerId && opponentTeam && opponentTeam._id === matchWinnerId;
+
+  const handleMatchSlotClick = async () => {
+    if (!team || isWinnerSlot) { // Cannot select BYE/TBD or Winner slot
+      return;
+    }
+
+    let newWinnerId = null;
+    let newStatus = "Upcoming"; // Default status if winner is unselected
+
+    if (matchWinnerId) { // A winner is already set for this match
+      if (team._id === matchWinnerId) {
+        // Clicking on the current winner: unselect winner
+        newWinnerId = null;
+        newStatus = "Upcoming"; // Or "In Progress" depending on desired behavior
+      } else {
+        // Clicking on the current loser: make it the new winner
+        newWinnerId = team._id;
+        newStatus = "Completed";
+      }
+    } else {
+      // No winner yet: make the clicked team the winner
+      newWinnerId = team._id;
+      newStatus = "Completed";
+    }
+
+    await onUpdateMatch(matchId, { Winner: newWinnerId, Status: newStatus });
+  };
 
   return (
-    <div className={styles.matchSlot}>
-      <div className={styles.teamName}>{teamDisplayName}</div>
+    <div
+      className={`${styles.matchSlot} ${isWinner ? styles.winner : ""} ${
+        (isLoser || (!team && teamDisplayName === "BYE")) ? styles.loser : ""
+      }`}
+      onClick={handleMatchSlotClick}
+    >
+      <div
+        className={styles.teamName} // No onClick here
+      >
+        {teamDisplayName}
+      </div>
       {!isWinnerSlot &&
-        team && ( // Only show score input for actual teams, not winner slots
+        team &&
+        opponentTeam && (
           <input
             type="text"
-            placeholder="0-0" // Example placeholder
+            placeholder="0-0"
             value={displayScore}
-            onChange={(e) => setDisplayScore(e.target.value)}
-            className={styles.teamScoreInput} // New CSS class
+            onChange={(e) => {
+              setDisplayScore(e.target.value);
+              onScoreChange(matchId, slotType, e.target.value); // Pass score change up to Round's local state
+            }}
+            onBlur={() => { // New onBlur handler
+              // Only save if this match is not yet completed (winner selected)
+              if (!matchWinnerId) { // Simplified condition
+                onScoreSave(matchId, slotType, displayScore); // Trigger save to backend
+              }
+            }}
+            className={styles.teamScoreInput}
           />
         )}
     </div>
@@ -46,8 +104,68 @@ const Round = memo(
   ({ title, matches, roundIndex, totalRounds, onUpdateMatch }) => {
     const isLastRound = totalRounds - 1;
 
+    // State to manage scores for each match within this round
+    const [matchScores, setMatchScores] = useState(() => {
+      const initialScores = {};
+      matches.forEach(match => {
+        const [score1 = "", score2 = ""] = match.Score ? match.Score.split(" + ") : ["", ""];
+        initialScores[match._id] = {
+          Team1: score1,
+          Team2: score2,
+        };
+      });
+      return initialScores;
+    });
+
+    // Handler for score changes from Match components (local state)
+    const handleScoreChange = useCallback((matchId, slotType, newScore) => {
+      setMatchScores(prevScores => ({
+        ...prevScores,
+        [matchId]: {
+          ...prevScores[matchId],
+          [slotType]: newScore,
+        },
+      }));
+    }, []);
+
+    // Handler for saving score to backend (onBlur from Match component)
+    const handleScoreSave = useCallback(async (matchId, slotType, newScore) => {
+      // Get the current scores for this match from the state
+      const currentScoresForMatch = matchScores[matchId];
+
+      let team1Score = currentScoresForMatch.Team1;
+      let team2Score = currentScoresForMatch.Team2;
+
+      // Update the specific score that just changed
+      if (slotType === "Team1") {
+        team1Score = newScore;
+      } else if (slotType === "Team2") {
+        team2Score = newScore;
+      }
+
+      // Concatenate the scores
+      const concatenatedScore = `${team1Score || ""} + ${team2Score || ""}`;
+
+      // Call parent's onUpdateMatch to save to backend
+      await onUpdateMatch(matchId, { Score: concatenatedScore });
+
+      // Optionally, update local state after successful save if needed,
+      // but the main goal here is to send to backend.
+      // The next fetch of draws will update the initialScores.
+    }, [matchScores, onUpdateMatch]); // matchScores is a dependency here
+
+
+    // Override onUpdateMatch to include concatenated score (for winner selection)
+    const handleUpdateMatchWithScore = useCallback(async (matchId, updateData) => {
+      const currentMatchScores = matchScores[matchId];
+      const concatenatedScore = `${currentMatchScores.Team1 || ""} + ${currentMatchScores.Team2 || ""}`;
+      await onUpdateMatch(matchId, { ...updateData, Score: concatenatedScore });
+    }, [matchScores, onUpdateMatch]);
+
+
     const handleStatusChange = (matchId, newStatus) => {
-      onUpdateMatch(matchId, { Status: newStatus });
+      // This will now use the new handleUpdateMatchWithScore
+      handleUpdateMatchWithScore(matchId, { Status: newStatus });
     };
 
     return (
@@ -77,16 +195,29 @@ const Round = memo(
                 <Match
                   key={`${match._id}-team1`} // Add key
                   team={match.Team1}
+                  opponentTeam={match.Team2} // Pass opponent
                   roundIndex={roundIndex}
                   matchId={match._id}
                   slotType="Team1"
+                  onUpdateMatch={handleUpdateMatchWithScore} // Use new handler for winner selection
+                  matchWinnerId={match.Winner?._id || match.Winner} // Ensure it's always an ID
+                  onScoreChange={handleScoreChange} // Pass score change handler (local)
+                  onScoreSave={handleScoreSave} // Pass score save handler (backend)
+                  initialScore={matchScores[match._id]?.Team1} // Pass initial score
                 />
+                <div className={styles.vsSeparator}>V/S</div> {/* New V/S separator */}
                 <Match
                   key={`${match._id}-team2`} // Add key
                   team={match.Team2}
+                  opponentTeam={match.Team1} // Pass opponent
                   roundIndex={roundIndex}
                   matchId={match._id}
                   slotType="Team2"
+                  onUpdateMatch={handleUpdateMatchWithScore} // Use new handler for winner selection
+                  matchWinnerId={match.Winner?._id || match.Winner} // Ensure it's always an ID
+                  onScoreChange={handleScoreChange} // Pass score change handler (local)
+                  onScoreSave={handleScoreSave} // Pass score save handler (backend)
+                  initialScore={matchScores[match._id]?.Team2} // Pass initial score
                 />
               </div>
               {!isLastRound && <div className={styles.connectorLine}></div>}
@@ -104,7 +235,7 @@ const ManageResult = () => {
   const [draws, setDraws] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchDraws = async () => {
+  const fetchDraws = useCallback(async () => { // Wrapped in useCallback
     if (selectedEvent) {
       setLoading(true);
       try {
@@ -115,6 +246,7 @@ const ManageResult = () => {
           { withCredentials: true }
         );
         setDraws(drawsRes.data.data);
+        console.log("[Frontend] Fetched draws data:", drawsRes.data.data); // Add this log
       } catch (error) {
         toast.error(error.response?.data?.message || "Error fetching data.");
         console.error("Error fetching data:", error);
@@ -122,7 +254,7 @@ const ManageResult = () => {
       }
       setLoading(false);
     }
-  };
+  }, [selectedEvent]); // Dependency array
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -159,51 +291,16 @@ const ManageResult = () => {
       );
       toast.success("Match updated successfully!");
 
-      // Update local state with the new data from the response
-      setDraws((prevDraws) =>
-        prevDraws.map((draw) => {
-          if (draw._id === matchId) {
-            const updatedDrawData = response.data.data;
-            let newWinner = draw.Winner; // Start with existing populated winner
+      // --- This is the re-fetch ---
+      await fetchDraws(); // Re-fetch all draws to get propagated winners
 
-            // If the API response includes a Winner ID, find the corresponding populated team
-            if (updatedDrawData.Winner) {
-              if (draw.Team1 && draw.Team1._id === updatedDrawData.Winner) {
-                newWinner = draw.Team1;
-              } else if (
-                draw.Team2 &&
-                draw.Team2._id === updatedDrawData.Winner
-              ) {
-                newWinner = draw.Team2;
-              } else {
-                // If winner is not Team1 or Team2, or not found, use the ID directly
-                newWinner = updatedDrawData.Winner;
-              }
-            } else if (updatedDrawData.Winner === null) {
-              newWinner = null; // Explicitly set to null if API sends null
-            }
-
-            return {
-              ...draw, // Keep all existing fields
-              Score:
-                updatedDrawData.Score !== undefined
-                  ? updatedDrawData.Score
-                  : draw.Score,
-              Status:
-                updatedDrawData.Status !== undefined
-                  ? updatedDrawData.Status
-                  : draw.Status,
-              Winner: newWinner,
-            };
-          }
-          return draw;
-        })
-      );
+      // Removed the local state update logic here.
+      // The fetchDraws() call will update the state with the latest data from the backend.
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to update match.");
       console.error("Error updating match:", error);
     }
-  }, []); // Empty dependency array means it's created once
+  }, [fetchDraws]); // fetchDraws is in dependency array
 
   const buildRounds = (draws) => {
     if (!draws || draws.length === 0) return [];

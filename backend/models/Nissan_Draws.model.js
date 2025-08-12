@@ -25,9 +25,11 @@ const nissanDrawsSchema = new mongoose.Schema({
   Winner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Team",
+    default: null,
   },
   Score: {
     type: String,
+    default: "",
   },
   Status: {
     type: String,
