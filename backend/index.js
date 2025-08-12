@@ -14,6 +14,7 @@ const allowedOrigins = [process.env.FRONTEND_URL, process.env.ADMIN_URL];
 app.use(
   cors({
     origin: function (origin, callback) {
+      console.log("Origin check:", origin, allowedOrigins);
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
