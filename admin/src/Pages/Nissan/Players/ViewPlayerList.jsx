@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api from '../../../api';
+import api from "../../../api";
 import styles from "./ViewPlayerList.module.css";
 import { FiTrash2 } from "react-icons/fi";
 
@@ -9,7 +9,7 @@ const ViewPlayerList = () => {
 
   const fetchPlayers = async () => {
     try {
-      const res = await api.get("http://localhost:3000/api/player/details", {
+      const res = await api.get(`${import.meta.env.VITE_APP_BACKEND_URL}/api/player/details`, {
         withCredentials: true,
       });
       setPlayers(res.data.data);
@@ -27,7 +27,9 @@ const ViewPlayerList = () => {
   const handleToggleFeeStatus = async (playerId) => {
     try {
       await api.put(
-        `http://localhost:3000/api/player/toggle-fee/${playerId}`,
+        `${
+          import.meta.env.VITE_APP_BACKEND_URL
+        }/api/player/toggle-fee/${playerId}`,
         {},
         { withCredentials: true }
       );
@@ -40,9 +42,12 @@ const ViewPlayerList = () => {
   const handleDeletePlayer = async (playerId) => {
     if (window.confirm("Are you sure you want to delete this player?")) {
       try {
-        await api.delete(`http://localhost:3000/api/player/${playerId}`, {
-          withCredentials: true,
-        });
+        await api.delete(
+          `${import.meta.env.VITE_APP_BACKEND_URL}/api/player/${playerId}`,
+          {
+            withCredentials: true,
+          }
+        );
         fetchPlayers();
       } catch (error) {
         console.error("Error deleting player:", error);

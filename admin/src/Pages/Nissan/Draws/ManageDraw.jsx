@@ -119,7 +119,9 @@ const ManageDraw = () => {
       setLoading(true);
       try {
         const drawsRes = await api.get(
-          `http://localhost:3000/api/nissan-draws/${selectedEvent}`,
+          `${
+            import.meta.env.VITE_APP_BACKEND_URL
+          }/api/nissan-draws/${selectedEvent}`,
           { withCredentials: true }
         );
         setDraws(drawsRes.data.data);
@@ -135,9 +137,12 @@ const ManageDraw = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await api.get("http://localhost:3000/api/events", {
-          withCredentials: true,
-        });
+        const res = await api.get(
+          `${import.meta.env.VITE_APP_BACKEND_URL}/api/events`,
+          {
+            withCredentials: true,
+          }
+        );
         setEvents(res.data.data);
         if (res.data.data.length > 0) {
           setSelectedEvent(res.data.data[0]._id);
@@ -159,7 +164,7 @@ const ManageDraw = () => {
       setLoading(true);
       try {
         await api.post(
-          "http://localhost:3000/api/nissan-draws/",
+          `${import.meta.env.VITE_APP_BACKEND_URL}/api/nissan-draws/`,
           { eventId: selectedEvent },
           { withCredentials: true }
         );
@@ -181,7 +186,9 @@ const ManageDraw = () => {
       try {
         for (const draw of draws) {
           await api.delete(
-            `http://localhost:3000/api/nissan-draws/${draw._id}`,
+            `${import.meta.env.VITE_APP_BACKEND_URL}/api/nissan-draws/${
+              draw._id
+            }`,
             { withCredentials: true }
           );
         }
@@ -278,7 +285,9 @@ const ManageDraw = () => {
     // Make API call to save the changes
     try {
       await api.put(
-        "http://localhost:3000/api/nissan-draws/swap-matchup/",
+        `${
+          import.meta.env.VITE_APP_BACKEND_URL
+        }/api/nissan-draws/swap-matchup/`,
         {
           sourceMatchId,
           sourceSlotType,
@@ -303,10 +312,7 @@ const ManageDraw = () => {
   const rounds = buildRounds(draws);
   const totalRounds = rounds.length;
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(TouchSensor)
-  );
+  const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
 
   return (
     <div className={styles.manageDrawContainer}>

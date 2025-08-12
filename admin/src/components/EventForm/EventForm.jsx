@@ -29,8 +29,8 @@ const EventForm = ({ event, onSave, onCancel, isMainEvent }) => {
       ? { name, description, date, location, organizer, rules }
       : { name, date, rules };
     const url = isMainEvent
-      ? "http://localhost:3000/api/main-events"
-      : "http://localhost:3000/api/events";
+      ? `${import.meta.env.VITE_APP_BACKEND_URL}/api/main-events`
+      : `${import.meta.env.VITE_APP_BACKEND_URL}/api/events`;
     if (event) {
       await api.put(`${url}/update/${event._id}`, eventData, {
         withCredentials: true,

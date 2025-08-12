@@ -109,7 +109,9 @@ const ManageResult = () => {
       setLoading(true);
       try {
         const drawsRes = await api.get(
-          `http://localhost:3000/api/nissan-draws/${selectedEvent}`,
+          `${
+            import.meta.env.VITE_APP_BACKEND_URL
+          }/api/nissan-draws/${selectedEvent}`,
           { withCredentials: true }
         );
         setDraws(drawsRes.data.data);
@@ -125,9 +127,12 @@ const ManageResult = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await api.get("http://localhost:3000/api/events", {
-          withCredentials: true,
-        });
+        const res = await api.get(
+          `${import.meta.env.VITE_APP_BACKEND_URL}/api/events`,
+          {
+            withCredentials: true,
+          }
+        );
         setEvents(res.data.data);
         if (res.data.data.length > 0) {
           setSelectedEvent(res.data.data[0]._id);
@@ -148,7 +153,7 @@ const ManageResult = () => {
     try {
       const response = await api.put(
         // Capture response to get updated data
-        `http://localhost:3000/api/nissan-draws/${matchId}`,
+        `${import.meta.env.VITE_APP_BACKEND_URL}/api/nissan-draws/${matchId}`,
         updateData,
         { withCredentials: true }
       );

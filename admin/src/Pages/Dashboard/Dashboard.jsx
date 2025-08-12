@@ -16,10 +16,10 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const [eventsRes, membersRes] = await Promise.all([
-          api.get("http://localhost:3000/api/events", {
+          api.get(`${import.meta.env.VITE_APP_BACKEND_URL}/api/events`, {
             withCredentials: true,
           }),
-          api.get("http://localhost:3000/api/member/all", {
+          api.get(`${import.meta.env.VITE_APP_BACKEND_URL}/api/member/all`, {
             withCredentials: true,
           }),
         ]);

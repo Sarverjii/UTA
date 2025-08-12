@@ -12,7 +12,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await axios.post(
-        "http://localhost:3000/api/admin/login",
+        `${import.meta.env.VITE_APP_BACKEND_URL}/api/admin/login`,
         { email, password },
         { withCredentials: true }
       );

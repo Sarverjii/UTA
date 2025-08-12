@@ -64,9 +64,12 @@ const UpdateTeamRanking = () => {
   const fetchAllTeams = async () => {
     setLoading(true);
     try {
-      const res = await api.get("http://localhost:3000/api/team/all", {
-        withCredentials: true,
-      });
+      const res = await api.get(
+        `${import.meta.env.VITE_APP_BACKEND_URL}/api/team/all`,
+        {
+          withCredentials: true,
+        }
+      );
       const teams = res.data.data;
       setAllTeams(teams);
       const uniqueEvents = [
@@ -104,16 +107,14 @@ const UpdateTeamRanking = () => {
       const orderedTeamIds = teams.map((t) => t._id);
       try {
         await api.put(
-          "http://localhost:3000/api/team/update-ranking",
+          `${import.meta.env.VITE_APP_BACKEND_URL}/api/team/update-ranking`,
           { orderedTeams: orderedTeamIds },
           { withCredentials: true }
         );
 
         // Update the main list to maintain consistency
         const newAllTeams = allTeams.map((team) => {
-          const updatedTeam = teams.find(
-            (ut) => ut._id === team._id
-          );
+          const updatedTeam = teams.find((ut) => ut._id === team._id);
           return updatedTeam || team;
         });
         setAllTeams(newAllTeams);
@@ -148,7 +149,7 @@ const UpdateTeamRanking = () => {
       const orderedTeamIds = updatedTeamsWithRanks.map((t) => t._id);
       try {
         await api.put(
-          "http://localhost:3000/api/team/update-ranking",
+          `${import.meta.env.VITE_APP_BACKEND_URL}/api/team/update-ranking`,
           { orderedTeams: orderedTeamIds },
           { withCredentials: true }
         );

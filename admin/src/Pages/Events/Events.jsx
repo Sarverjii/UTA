@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api from '../../api';
+import api from "../../api";
 import styles from "./Events.module.css";
 import EventForm from "../../components/EventForm/EventForm";
 import { FiEdit, FiPlus, FiTrash2 } from "react-icons/fi";
@@ -11,9 +11,12 @@ const Events = () => {
 
   const fetchMainEvents = async () => {
     try {
-      const res = await api.get("http://localhost:3000/api/main-events", {
-        withCredentials: true,
-      });
+      const res = await api.get(
+        `${import.meta.env.VITE_APP_BACKEND_URL}/api/main-events`,
+        {
+          withCredentials: true,
+        }
+      );
       setMainEvents(res.data.data);
     } catch (error) {
       console.error("Error fetching main events:", error);
@@ -39,7 +42,9 @@ const Events = () => {
     if (window.confirm("Are you sure you want to delete this event?")) {
       try {
         await api.delete(
-          `http://localhost:3000/api/main-events/delete/${eventId}`,
+          `${
+            import.meta.env.VITE_APP_BACKEND_URL
+          }/api/main-events/delete/${eventId}`,
           { withCredentials: true }
         );
         fetchMainEvents();
