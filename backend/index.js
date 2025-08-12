@@ -33,9 +33,11 @@ app.use("/api/team/", TeamRouter);
 app.use("/api/nissan-draws/", NissanDrawsRouter);
 
 // Starting the Server
-const PORT_NUMBER = process.env.PORT_NUMBER || 3000;
+// Starting the Server
+const PORT = process.env.PORT || process.env.PORT_NUMBER || 3000;
+
 connectDB().then(() => {
-  app.listen(PORT_NUMBER, () => {
-    console.log(`Server Listening on http://localhost:${PORT_NUMBER}`);
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server listening on port ${PORT}`);
   });
 });

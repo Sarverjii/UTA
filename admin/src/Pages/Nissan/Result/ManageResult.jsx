@@ -271,11 +271,3 @@ const ManageResult = () => {
 };
 
 export default ManageResult;
-
-
-
-
-
-
-
-
