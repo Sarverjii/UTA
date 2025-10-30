@@ -20,7 +20,7 @@ export default function Home() {
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
-        },
+        }
       );
       if (res.data.success) {
         setEvents(res.data.data);
@@ -37,7 +37,7 @@ export default function Home() {
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
-        },
+        }
       );
       if (res.data.success) {
         setTournamentDetail(res.data.data);
@@ -54,7 +54,7 @@ export default function Home() {
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
-        },
+        }
       );
       if (res.data.success) {
         setpricesBenefit(res.data.data);
@@ -71,7 +71,7 @@ export default function Home() {
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
-        },
+        }
       );
       if (res.data.success) {
         setvenue(res.data.data);
@@ -303,11 +303,30 @@ export default function Home() {
                   <Link to="/tournaments/login" className={styles.loginButton}>
                     <span className={styles.buttonText}>Login</span>
                   </Link>
-                   <Link to="/tournaments/results" className={styles.registerButton}>
+                  <Link
+                    to="/tournaments/results"
+                    className={styles.registerButton}
+                  >
                     <span className={styles.buttonText}>View Results</span>
                   </Link>
                   <Link to="/tournaments/draws" className={styles.loginButton}>
                     <span className={styles.buttonText}>View Draws</span>
+                  </Link>
+                  <Link
+                    to="/tournaments/registered-teams"
+                    className={styles.registerButton}
+                  >
+                    <span className={styles.buttonText}>
+                      View Registered Teams
+                    </span>
+                  </Link>
+                  <Link
+                    to="/tournaments/registered-players"
+                    className={styles.loginButton}
+                  >
+                    <span className={styles.buttonText}>
+                      View Registered Players
+                    </span>
                   </Link>
                 </div>
               </div>
@@ -382,7 +401,7 @@ export default function Home() {
                         </>
                       )}
                     </div>
-                  ) : null,
+                  ) : null
                 )}
 
                 {tournamentDetail.map((item) =>
@@ -398,7 +417,7 @@ export default function Home() {
                         </>
                       )}
                     </div>
-                  ) : null,
+                  ) : null
                 )}
                 {/* <p className={styles.tileParagraph}>
                   Any participant who loses both matches in the first round or
@@ -435,7 +454,7 @@ export default function Home() {
                         </>
                       )}
                     </div>
-                  ) : null,
+                  ) : null
                 )}
                 {/* <h4 className={styles.tileSubtitle}>Entry Rules:</h4>
                 <ul className={styles.tileList}>
@@ -461,7 +480,7 @@ export default function Home() {
                         </>
                       )}
                     </div>
-                  ) : null,
+                  ) : null
                 )}
                 {/* <h4 className={styles.tileSubtitle}>Entry Fees</h4>
                 <p className={styles.tileParagraph}>Two events: ₹5,000</p> */}
@@ -500,7 +519,7 @@ export default function Home() {
                       />
                     )}
                   </div>
-                ) : null,
+                ) : null
               )}
               {/* <h3 className={styles.tileTitle}>Prize Money</h3> */}
               {/* <ul className={styles.tileList}>
@@ -524,7 +543,7 @@ export default function Home() {
                       />
                     )}
                   </div>
-                ) : null,
+                ) : null
               )}
 
               {/* <h3 className={styles.tileTitle}>Participant Benefits</h3> */}
@@ -577,7 +596,7 @@ export default function Home() {
                     ></iframe>
                   </div>
                 </div>
-              ) : null,
+              ) : null
             )}
 
             {/* Gala Party & Stay Tile */}
@@ -600,7 +619,7 @@ export default function Home() {
                     ></iframe>
                   </div>
                 </div>
-              ) : null,
+              ) : null
             )}
           </div>
           {/* Important Information Tile - Moved to span full width */}
@@ -616,7 +635,7 @@ export default function Home() {
                     />
                   )}
                 </>
-              ) : null,
+              ) : null
             )}
 
             {/* <h3 className={styles.tileTitle}>Important Information</h3>

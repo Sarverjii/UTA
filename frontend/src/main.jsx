@@ -46,7 +46,7 @@ const router = createBrowserRouter(
       <Route path="/tournaments" element={<Nissan_Home />} />
       <Route path="/tournaments/register" element={<Nissan_Register />} />
       <Route
-        path="/tournaments/registered-players"
+        path="/tournaments/registered-teams"
         element={<Nissan_RegisteredPlayers />}
       />
       <Route path="/tournaments/login" element={<Nissan_Login />} />
