@@ -8,15 +8,15 @@ const LoginPage1 = ({ player, handleNext, setPlayer, id }) => {
     whatsappNumber: "",
     dob: "",
     city: "",
-    shirtSize: "",
-    shortSize: "",
+    shirtSize: "M",
+    shortSize: "M",
     foodPref: "",
     stay: false,
     feePaid: false,
     transactionDetails: "",
   });
 
-  const sizeOptions = ["XS", "S", "M", "L", "XL", "XXL"];
+  // const sizeOptions = ["XS", "S", "M", "L", "XL", "XXL"];
   const foodOptions = ["Veg", "Non-Veg", "I Won't Be There"];
 
   useEffect(() => {
@@ -26,8 +26,8 @@ const LoginPage1 = ({ player, handleNext, setPlayer, id }) => {
         whatsappNumber: player.whatsappNumber || "",
         dob: player.dob ? new Date(player.dob).toISOString().split("T")[0] : "",
         city: player.city || "",
-        shirtSize: player.shirtSize || "",
-        shortSize: player.shortSize || "",
+        shirtSize: player.shirtSize || "M",
+        shortSize: player.shortSize || "M",
         foodPref: player.foodPref || "",
         stay: player.stay || false,
         feePaid: player.feePaid || false,
@@ -113,7 +113,7 @@ const LoginPage1 = ({ player, handleNext, setPlayer, id }) => {
           className={styles.input}
         />
       </section>
-      <section className={styles.formSection}>
+      {/* <section className={styles.formSection}>
         <label htmlFor="shirtSize" className={styles.label}>
           Shirt Size
         </label>
@@ -133,8 +133,8 @@ const LoginPage1 = ({ player, handleNext, setPlayer, id }) => {
             </option>
           ))}
         </select>
-      </section>
-      <section className={styles.formSection}>
+      </section> */}
+      {/* <section className={styles.formSection}>
         <label htmlFor="shortSize" className={styles.label}>
           Short Size
         </label>
@@ -154,7 +154,7 @@ const LoginPage1 = ({ player, handleNext, setPlayer, id }) => {
             </option>
           ))}
         </select>
-      </section>
+      </section> */}
       <section className={styles.formSection}>
         <label htmlFor="foodPref" className={styles.label}>
           Food Preference

@@ -296,7 +296,7 @@
 .bannerContent {
   position: relative;
   display: flex;
-  min-height: 480px;
+  /* min-height: 480px; */
   flex-direction: column;
   gap: var(--spacing-lg); /* 24px */
   background-size: cover;
@@ -305,6 +305,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--spacing-md); /* 16px */
+  padding: 50px 0 60px;
   border-radius: 0;
   color: var(--text-light);
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
@@ -549,6 +550,7 @@
   max-width: 100%;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: var(--spacing-2xl); /* 24px */
 }
 
 .fullWidthCta {
@@ -606,4 +608,19 @@
 
 .adminLoginLink:hover {
   color: var(--hover-dark);
+}
+
+ul {
+  list-style-type: disc;
+  list-style-position: inside;
+  margin-bottom: var(--spacing-md);
+  padding-left: 20px;
+}
+p {
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.5;
+}
+
+li {
+  line-height: 1.5;
 }

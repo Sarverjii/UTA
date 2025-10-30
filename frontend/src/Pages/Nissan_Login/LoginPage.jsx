@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 import LoginPage1 from "./LoginPage1/LoginPage1";
 import LoginPage2 from "./LoginPage2/LoginPage2";
 import LoginPage3 from "./LoginPage3/LoginPage3";
+import Header from "../../Components/Header/Header";
+import Footer from "../../Components/Footer/Footer";
 
 const LoginPage = () => {
   const [events, setEvents] = useState([]);
@@ -100,7 +102,7 @@ const LoginPage = () => {
   };
   return (
     <div>
-      <header className={styles.header}>
+      {/* <header className={styles.header}>
         <div className={styles.headerLeft}>
           <div className={styles.logoWrapper}>
             <img src="/logo.png" alt="UTA LOGO" />
@@ -108,10 +110,10 @@ const LoginPage = () => {
           <h1 className={styles.title}>Uttranchal Tennis Association</h1>
         </div>
         <div className={styles.headerRight}>
-          <Link to="/Nissan">Back to Home</Link>
+          <Link to="/tournaments">Back to Home</Link>
         </div>
-      </header>
-
+      </header> */}
+  <Header />
       <section className={styles.formContainer}>
         <div className={styles.stepIndicator}>
           <div
@@ -170,6 +172,8 @@ const LoginPage = () => {
         </section>
         <section>{currentStep === 3 && <LoginPage3 />}</section>
       </section>
+
+      <Footer />
     </div>
   );
 };

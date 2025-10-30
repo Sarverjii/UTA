@@ -5,6 +5,8 @@ import RegisterPage1 from "./RegisterPage1/RegisterPage1";
 import axios from "axios";
 import RegisterPage2 from "./RegisterPage2/RegisterPage2";
 import RegisterPage3 from "./RegisterPage3/RegisterPage3";
+import Header from "../../Components/Header/Header";
+import Footer from "../../Components/Footer/Footer";
 
 const Register = () => {
   const [events, setEvents] = useState([]);
@@ -18,9 +20,9 @@ const Register = () => {
     whatsappNumber: "",
     dob: "",
     city: "",
-    shirtSize: "",
-    shortSize: "",
-    foodPref: "",
+    shirtSize: "M",
+    shortSize: "M",
+    foodPref: "Veg",
     stay: false,
     feePaid: false,
     transactionDetails: "",
@@ -79,7 +81,7 @@ const Register = () => {
   };
   return (
     <div>
-      <header className={styles.header}>
+      {/* <header className={styles.header}>
         <div className={styles.headerLeft}>
           <div className={styles.logoWrapper}>
             <img src="/logo.png" alt="UTA LOGO" />
@@ -87,10 +89,10 @@ const Register = () => {
           <h1 className={styles.title}>Uttranchal Tennis Association</h1>
         </div>
         <div className={styles.headerRight}>
-          <Link to="/Nissan">Back to Home</Link>
+          <Link to="/tournaments">Back to Home</Link>
         </div>
-      </header>
-
+      </header> */}
+      <Header/>
       <section className={styles.formContainer}>
         <div className={styles.stepIndicator}>
           <div
@@ -150,6 +152,7 @@ const Register = () => {
           {currentStep === 3 && <RegisterPage3 formData={formData} />}
         </section>
       </section>
+      <Footer />
     </div>
   );
 };

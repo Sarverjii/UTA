@@ -216,7 +216,7 @@
   padding-right: 16px; /* px-4 */
   padding-top: 12px; /* py-3 */
   padding-bottom: 12px; /* py-3 */
-  justify-content: flex-end; /* justify-end */
+  justify-content: flex-start; /* justify-end */
 }
 
 .submitButton {

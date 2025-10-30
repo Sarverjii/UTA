@@ -143,7 +143,7 @@ const Header = () => {
           <div className={styles.logoIcon}>
             <img src="/logo.png" alt="UTA LOGO" />
             <h2 className={styles.headerTitle}>
-              Uttranchal Tennis Association
+              Uttaranchal Tennis Association
             </h2>
           </div>
         </div>
@@ -183,7 +183,7 @@ const Header = () => {
                       </div>
                     </div>
                     <div className={styles.dropdownLinks}>
-                      <Link
+                      {/* <Link
                         to="/profile"
                         onClick={() => setShowDropdown(false)}
                       >
@@ -194,7 +194,7 @@ const Header = () => {
                       </Link>
                       <Link to="/events" onClick={() => setShowDropdown(false)}>
                         Events
-                      </Link>
+                      </Link> */}
                       <button
                         className={styles.logoutButton} // Using the new logoutButton class
                         onClick={handleLogout}
@@ -274,7 +274,7 @@ const Header = () => {
           </Link>
           <Link
             className={styles.navLink}
-            to="/tournament"
+            to="/tournaments"
             onClick={() => setMobileMenuOpen(false)}
           >
             Tournaments
@@ -317,7 +317,7 @@ const Header = () => {
                 </div>
               </div>
               {/* Indented Profile-related Links */}
-              <Link
+              {/* <Link
                 className={`${styles.navLink} ${styles.indentedNavLink}`}
                 to="/profile"
                 onClick={() => setMobileMenuOpen(false)}
@@ -337,7 +337,7 @@ const Header = () => {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Events
-              </Link>
+              </Link> */}
             </>
           )}
         </div>

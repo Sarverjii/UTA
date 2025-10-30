@@ -21,35 +21,35 @@ const KeyPersonnelTable = () => (
         <tbody>
           <tr className={styles.tableRow}>
             <td className={`${styles.tableCell} ${styles.colName}`}>
-              Arjun Sharma
+              S. P. Singh
             </td>
             <td className={`${styles.tableCell} ${styles.colPosition}`}>
               President
             </td>
             <td className={`${styles.tableCell} ${styles.colContact}`}>
-              arjun.sharma@uta.org
+              spsingh@bccinfra.com
             </td>
           </tr>
           <tr className={styles.tableRow}>
             <td className={`${styles.tableCell} ${styles.colName}`}>
-              Priya Verma
+              Vijendra Chauhan
             </td>
             <td className={`${styles.tableCell} ${styles.colPosition}`}>
               Secretary
             </td>
             <td className={`${styles.tableCell} ${styles.colContact}`}>
-              priya.verma@uta.org
+              vijendrachauhan@gmail.com
             </td>
           </tr>
           <tr className={styles.tableRow}>
             <td className={`${styles.tableCell} ${styles.colName}`}>
-              Rohan Kapoor
+              Shailendra Kumar Sharma
             </td>
             <td className={`${styles.tableCell} ${styles.colPosition}`}>
               Treasurer
             </td>
             <td className={`${styles.tableCell} ${styles.colContact}`}>
-              rohan.kapoor@uta.org
+              jaimatadi_sk@yahoo.com
             </td>
           </tr>
         </tbody>
@@ -69,9 +69,9 @@ const About = () => {
             <div className={styles.aboutTextGroup}>
               <p className={styles.aboutHeading}>About Us</p>
               <p className={styles.aboutParagraph}>
-                The Uttarakhand Tennis Association (UTA) is the governing body
+                The Uttaranchal Tennis Association (UTA) is the governing body
                 for tennis in the state of Uttarakhand, India. Established in
-                1995, the association is committed to promoting and developing
+                2001, the association is committed to promoting and developing
                 tennis at all levels, from grassroots to professional. UTA
                 organizes tournaments, training programs, and workshops to
                 enhance the skills of players and coaches. It also works to
@@ -94,7 +94,7 @@ const About = () => {
           {/* History Section */}
           <h2 className={styles.sectionHeading}>History</h2>
           <p className={styles.sectionParagraph}>
-            Founded in 1995, the Uttarakhand Tennis Association has a rich
+            Founded in 2001, the Uttaraanchal Tennis Association has a rich
             history of promoting tennis in the region. Over the years, UTA has
             organized numerous state-level and national tournaments, providing a
             platform for local talent to showcase their skills. The association

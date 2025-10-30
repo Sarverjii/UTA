@@ -1,36 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styles from "./Tournaments.module.css";
 import { Link } from "react-router-dom";
 import TournamentListing from "../../Components/TournamentListing/TournamentListing";
 import { FaSearch } from "react-icons/fa";
-import axios from "axios";
+// import axios from "axios";
 
 const Tournaments = () => {
-  const [tournaments, setTournaments] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [tournaments, setTournaments] = useState([]);
+  // const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    const fetchTournaments = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_APP_BACKEND_URL}/api/main-events`
-        );
-        setTournaments(response.data.data);
-      } catch (error) {
-        console.error("Error fetching tournaments:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchTournaments = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${import.meta.env.VITE_APP_BACKEND_URL}/api/main-events`
+  //       );
+  //       setTournaments(response.data.data || []);
+  //     } catch (error) {
+  //       console.error("Error fetching tournaments:", error);
+  //       setTournaments([]);
+  //     }
+  //   };
 
-    fetchTournaments();
-  }, []);
+  //   fetchTournaments();
+  // }, []);
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
+  // const handleSearchChange = (event) => {
+  //   setSearchTerm(event.target.value);
+  // };
 
-  const filteredTournaments = tournaments.filter((tournament) =>
-    tournament.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const filteredTournaments = tournaments.filter((tournament) =>
+  //   tournament.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   return (
     <div className={styles.rootContainer}>
@@ -39,7 +40,7 @@ const Tournaments = () => {
           {/* Hero Section */}
           <section className={styles.tournamentsHeroSection}>
             <h2 className={styles.tournamentsHeroHeading}>
-              Nissan All India Open Seniors Tennis Tournament 2024, Dehradun
+              All India Open Seniors Tennis Tournament 2025, Dehradun
             </h2>
             <p className={styles.tournamentsHeroParagraph}>
               Join us for an exciting tournament in the heart of Dehradun!
@@ -50,11 +51,11 @@ const Tournaments = () => {
           </section>
 
           {/* Upcoming Tournaments Section */}
-          <section className={styles.upcomingTournaments}>
-            <h1 className={styles.sectionTitle}>Upcoming Tournaments</h1>
+          {/* <section className={styles.upcomingTournaments}>
+            <h1 className={styles.sectionTitle}>Upcoming Tournaments</h1> */}
 
             {/* Search Bar with Icon */}
-            <label className={styles.searchLabel}>
+            {/* <label className={styles.searchLabel}>
               <div className={styles.searchInnerWrapper}>
                 <div className={styles.searchIconWrapper}>
                   <FaSearch className={styles.searchIcon} aria-hidden="true" />
@@ -68,10 +69,10 @@ const Tournaments = () => {
                   aria-label="Search tournaments"
                 />
               </div>
-            </label>
+            </label> */}
 
             {/* Render Tournament Listings */}
-            {filteredTournaments.length > 0 ? (
+            {/* {filteredTournaments.length > 0 ? (
               filteredTournaments.map((tournament) => (
                 <TournamentListing
                   key={tournament._id}
@@ -86,7 +87,7 @@ const Tournaments = () => {
                 No tournaments found matching your criteria.
               </p>
             )}
-          </section>
+          </section> */}
         </div>
       </div>
     </div>

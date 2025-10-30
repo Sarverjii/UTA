@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "axios";
 import styles from "./Nissan_Login.module.css";
+import Header from "../../Components/Header/Header";
+import Footer from "../../Components/Footer/Footer";
 
 const Nissan_Login = () => {
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ const Nissan_Login = () => {
         }
       );
       if (res.data.success) {
-        navigate(`/nissan/login/${res.data.data.id}`);
+        navigate(`/tournaments/login/${res.data.data.id}`);
         toast.success(res.data.message);
       }
     } catch (error) {
@@ -39,7 +41,7 @@ const Nissan_Login = () => {
 
   return (
     <div>
-      <header className={styles.header}>
+      {/* <header className={styles.header}>
         <div className={styles.headerLeft}>
           <div className={styles.logoWrapper}>
             <img src="/logo.png" alt="UTA LOGO" />
@@ -47,10 +49,10 @@ const Nissan_Login = () => {
           <h1 className={styles.title}>Uttranchal Tennis Association</h1>
         </div>
         <div className={styles.headerRight}>
-          <Link to="/Nissan">Back to Home</Link>
+          <Link to="/tournaments">Back to Home</Link>
         </div>
-      </header>
-
+      </header> */}
+    <Header />
       <section className={styles.formContainer}>
         <form className={styles.loginForm} onSubmit={loginHandler}>
           <h2 className={styles.formTitle}>Player Login</h2>
@@ -95,12 +97,13 @@ const Nissan_Login = () => {
 
           <p className={styles.registerPrompt}>
             Don't have an account?{" "}
-            <Link to="/nissan/register" className={styles.registerLink}>
+            <Link to="/tournaments/register" className={styles.registerLink}>
               Register here
             </Link>
           </p>
         </form>
       </section>
+      <Footer />
     </div>
   );
 };

@@ -7,7 +7,7 @@ const LoginPage3 = () => {
     <div className={styles.container}>
       <h2 className={styles.title}>Update Successful!</h2>
       <p className={styles.message}>Your details have been updated successfully.</p>
-      <Link to="/nissan" className={styles.homeButton}>
+      <Link to="/tournaments" className={styles.homeButton}>
         Back to Home
       </Link>
     </div>

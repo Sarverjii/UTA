@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./RegisteredPlayers.module.css";
 import { Link } from "react-router-dom";
+import Header from "../../Components/Header/Header";
+import Footer from "../../Components/Footer/Footer";
 
 const RegisteredPlayers = () => {
   const [players, setPlayers] = useState([]);
@@ -70,17 +72,18 @@ const RegisteredPlayers = () => {
   });
 
   return (
+    <>
+      <Header />
     <div className={styles.container}>
-      <header className={styles.header}>
+      {/* <header className={styles.header}>
         <div className={styles.headerLogoGroup}>
           <div className={styles.logoIcon}>
             <img src="/logo.png" alt="UTA LOGO" />
           </div>
         </div>
         <h2 className={styles.headerTitle}>Uttranchal Tennis Association</h2>
-        <Link to={"/Nissan"}>Back to Home</Link>
-      </header>
-
+        <Link to={"/tournaments"}>Back to Home</Link>
+      </header> */}
       <main className={styles.mainContent}>
         <h2 className={styles.pageTitle}>Registered Players</h2>
 
@@ -153,6 +156,9 @@ const RegisteredPlayers = () => {
         )}
       </main>
     </div>
+
+      <Footer />
+    </>
   );
 };
 
