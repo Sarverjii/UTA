@@ -92,6 +92,15 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               </li>
               <li>
                 <NavLink
+                  to="/nissan/view-player-journey"
+                  className={({ isActive }) => (isActive ? styles.active : "")}
+                  onClick={toggleSidebar}
+                >
+                  <FiUsers className={styles.icon} /> View Player Journey
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
                   to="/nissan/manage-draw"
                   className={({ isActive }) => (isActive ? styles.active : "")}
                   onClick={toggleSidebar}

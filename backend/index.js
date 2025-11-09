@@ -9,14 +9,14 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const allowedOrigins = [process.env.FRONTEND_URL, process.env.ADMIN_URL, "https://api.utennisa.com" ];
-
-
-
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.ADMIN_URL,
+  "https://api.utennisa.com",
+];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    console.log("Origin check:", origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true); // allow
     } else {
@@ -30,8 +30,6 @@ const corsOptions = {
 
 // ✅ Use the SAME config for all requests
 app.use(cors(corsOptions));
-
-
 
 const PlayerRouter = require("./Route/Player.route.js");
 const MemberRouter = require("./Route/Member.route.js");
@@ -77,5 +75,7 @@ connectDB().then(() => {
 // Global error handler for debugging
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err.stack || err);
-  res.status(500).json({ error: "Internal Server Error", details: err.message });
+  res
+    .status(500)
+    .json({ error: "Internal Server Error", details: err.message });
 });

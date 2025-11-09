@@ -14,6 +14,7 @@ import ViewPlayerList from "./Pages/Nissan/Players/ViewPlayerList";
 import ManageDraw from "./Pages/Nissan/Draws/ManageDraw";
 import ManageResult from "./Pages/Nissan/Result/ManageResult";
 import UpdateEvents from "./Pages/Nissan/UpdateEvents/UpdateEvents";
+import ViewPlayerJourney from "./Pages/Nissan/Journey/ViewPlayerJourney";
 
 import { Toaster } from "sonner";
 
@@ -99,6 +100,16 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <ViewPlayerList />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/nissan/view-player-journey"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ViewPlayerJourney />
               </Layout>
             </ProtectedRoute>
           }

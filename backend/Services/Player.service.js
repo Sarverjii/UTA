@@ -1,6 +1,7 @@
 const Player = require("../models/Player.model.js");
 const Team = require("../models/Team.model.js");
 const Event = require("../models/Event.model.js");
+const Nissan_Draws = require("../models/Nissan_Draws.model.js");
 
 const SHIRT_SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 const FOOD_PREFS = ["Veg", "Non-Veg"];
@@ -987,6 +988,73 @@ const deletePlayerAndHandleTeams = async (playerId) => {
   }
 };
 
+const getPlayerJourney = async (playerId) => {
+  try {
+    // Step 1️⃣ Ensure playerId is an ObjectId
+    const playerObjectId = new mongoose.Types.ObjectId(playerId);
+
+    // Step 2️⃣ Find all teams where the player is partner1 or partner2
+    const teams = await Team.find({
+      $or: [{ partner1: playerObjectId }, { partner2: playerObjectId }],
+    }).select("_id");
+
+    const teamIds = teams.map((t) => t._id);
+
+    // Step 3️⃣ If no teams, return an empty array directly
+    if (teamIds.length === 0) {
+      throw new Error("No teams found for this player");
+    }
+
+    // Step 4️⃣ Fetch only relevant draws
+    const draws = await Nissan_Draws.find({
+      $or: [{ Team1: { $in: teamIds } }, { Team2: { $in: teamIds } }],
+    }).populate([
+      {
+        path: "Team1",
+        select: "partner1 partner2",
+        populate: [
+          { path: "partner1", select: "name" },
+          { path: "partner2", select: "name" },
+        ],
+      },
+      {
+        path: "Team2",
+        select: "partner1 partner2",
+        populate: [
+          { path: "partner1", select: "name" },
+          { path: "partner2", select: "name" },
+        ],
+      },
+      {
+        path: "Winner",
+        select: "partner1 partner2",
+        populate: [
+          { path: "partner1", select: "name" },
+          { path: "partner2", select: "name" },
+        ],
+      },
+      { path: "Event", select: "name" },
+    ]);
+
+    draws.sort((a, b) => {
+      // 1️⃣ Sort by Event name (alphabetically)
+      const eventA = a.Event?.name?.toLowerCase() || "";
+      const eventB = b.Event?.name?.toLowerCase() || "";
+      const eventCompare = eventA.localeCompare(eventB);
+      if (eventCompare !== 0) return eventCompare;
+
+      // 2️⃣ Then sort by Stage (e.g. "Quarter Final" before "Semi Final")
+      const stageA = a.Stage?.toLowerCase() || "";
+      const stageB = b.Stage?.toLowerCase() || "";
+      return stageA.localeCompare(stageB);
+    });
+
+    return draws;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   RegisterPlayer,
   loginPlayer,
@@ -996,4 +1064,5 @@ module.exports = {
   toggleFeeStatus,
   deletePlayerAndHandleTeams,
   getPlayersWithDetailsFrontend,
+  getPlayerJourney,
 };

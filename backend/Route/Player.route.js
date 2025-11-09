@@ -14,5 +14,6 @@ router.post("/:id/updatePlayer", PlayerController.updatePlayer);
 router.post("/:id/updateTeams", PlayerController.updateTeams);
 router.put("/toggle-fee/:id", isAdmin, PlayerController.toggleFeeStatus);
 router.delete("/:id", isAdmin, PlayerController.deletePlayer);
+router.get("/journey/:playerId", isAdmin, PlayerController.getPlayerJourney);
 
 module.exports = router;
