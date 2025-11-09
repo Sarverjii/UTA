@@ -113,6 +113,21 @@ const getPlayersWithDetails = async (req, res) => {
     });
   }
 };
+const getPlayersWithDetailsFrontend = async (req, res) => {
+  try {
+    const players = await PlayerService.getPlayersWithDetailsFrontend();
+    res.status(200).json({
+      success: true,
+      message: "Fetched Players Successfully",
+      data: players,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 const toggleFeeStatus = async (req, res) => {
   try {
@@ -157,4 +172,5 @@ module.exports = {
   getPlayersWithDetails,
   toggleFeeStatus,
   deletePlayer,
+  getPlayersWithDetailsFrontend
 };

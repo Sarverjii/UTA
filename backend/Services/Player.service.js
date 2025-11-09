@@ -667,15 +667,19 @@ const updateTeams = async (id, data) => {
         // Check if the current team structure matches the *desired* structure
         let isCurrentTeamMatch = false;
         if (isPlayerPartner1) {
-            const oldPartnerId = currentTeam.partner2 ? currentTeam.partner2.toString() : null;
-            if (oldPartnerId === (targetPartnerId || null)) {
-                isCurrentTeamMatch = true;
-            }
+          const oldPartnerId = currentTeam.partner2
+            ? currentTeam.partner2.toString()
+            : null;
+          if (oldPartnerId === (targetPartnerId || null)) {
+            isCurrentTeamMatch = true;
+          }
         } else if (isPlayerPartner2) {
-            const oldPartnerId = currentTeam.partner1 ? currentTeam.partner1.toString() : null;
-            if (oldPartnerId === (targetPartnerId || null)) {
-                isCurrentTeamMatch = true;
-            }
+          const oldPartnerId = currentTeam.partner1
+            ? currentTeam.partner1.toString()
+            : null;
+          if (oldPartnerId === (targetPartnerId || null)) {
+            isCurrentTeamMatch = true;
+          }
         }
 
         if (isCurrentTeamMatch) {
@@ -886,6 +890,52 @@ const getPlayersWithDetails = async () => {
   }
   return players;
 };
+const getPlayersWithDetailsFrontend = async () => {
+  const players = await Player.find({}).lean();
+
+  const finalPlayersList = [];
+
+  for (const player of players) {
+    const teams = await Team.find({
+      $or: [{ partner1: player._id }, { partner2: player._id }],
+    })
+      .populate("eventId", "name")
+      .populate("partner1", "name")
+      .populate("partner2", "name");
+
+    if (teams.length > 0) {
+      const team1 = teams[0];
+      player.event1 = team1.eventId.name;
+      if (team1.partner1._id.toString() === player._id.toString()) {
+        player.event1Partner = team1.partner2 ? team1.partner2.name : "N/A";
+      } else {
+        player.event1Partner = team1.partner1.name;
+      }
+    }
+    if (teams.length > 1) {
+      const team2 = teams[1];
+      player.event2 = team2.eventId.name;
+      if (team2.partner1._id.toString() === player._id.toString()) {
+        player.event2Partner = team2.partner2 ? team2.partner2.name : "N/A";
+      } else {
+        player.event2Partner = team2.partner1.name;
+      }
+    }
+    const finalPlayer = {
+      name: player.name,
+      event1: player.event1,
+      event1Partner: player.event1Partner,
+      event2: player.event2,
+      event2Partner: player.event2Partner,
+      whatsappNumber: player.whatsappNumber,
+      dob: player.dob,
+      city: player.city,
+    };
+
+    finalPlayersList.push(finalPlayer);
+  }
+  return finalPlayersList;
+};
 
 const toggleFeeStatus = async (playerId) => {
   const player = await Player.findById(playerId);
@@ -945,4 +995,5 @@ module.exports = {
   getPlayersWithDetails,
   toggleFeeStatus,
   deletePlayerAndHandleTeams,
+  getPlayersWithDetailsFrontend,
 };

@@ -303,39 +303,13 @@ export default function Home() {
                   <Link to="/tournaments/login" className={styles.loginButton}>
                     <span className={styles.buttonText}>Login</span>
                   </Link>
-                  <Link
-                    to="/tournaments/results"
-                    className={styles.registerButton}
-                  >
-                    <span className={styles.buttonText}>View Results</span>
-                  </Link>
-                  <Link to="/tournaments/draws" className={styles.loginButton}>
-                    <span className={styles.buttonText}>View Draws</span>
-                  </Link>
-                  <Link
-                    to="/tournaments/registered-teams"
-                    className={styles.registerButton}
-                  >
-                    <span className={styles.buttonText}>
-                      View Registered Teams
-                    </span>
-                  </Link>
-                  <Link
-                    to="/tournaments/registered-players"
-                    className={styles.loginButton}
-                  >
-                    <span className={styles.buttonText}>
-                      View Registered Players
-                    </span>
-                  </Link>
                 </div>
               </div>
             </div>
           </div>
         </section>
-
         {/* Ready to Participate Section */}
-        {/* <section className={`${styles.ctaSection} ${styles.fullWidthCta}`}>
+        <section className={`${styles.ctaSection} ${styles.fullWidthCta}`}>
           <h2 className={styles.sectionTitle}>Ready to Participate?</h2>
           <p className={styles.ctaParagraph}>
             Join us for an exciting tennis tournament with great prizes and
@@ -343,22 +317,25 @@ export default function Home() {
           </p>
           <div className={styles.ctaButtons}>
             <Link
-              to="/tournaments/register"
-              className={styles.registerButtonCta}
+              to="/tournaments/registered-teams"
+              className={styles.registerButton}
             >
-              <span className={styles.buttonText}>Register Now</span>
-            </Link>
+              <span className={styles.buttonText}>View Registered Teams</span>
+            </Link> 
             <Link
               to="/tournaments/registered-players"
-              className={styles.loginButtonCta}
+              className={styles.loginButton}
             >
-              <span className={styles.buttonText}>Registered Players</span>
+              <span className={styles.buttonText}>View Registered Players</span>
             </Link>
-            <Link to="/tournaments/results" className={styles.registerButtonCta}>
-              <span className={styles.buttonText}>View Result</span>
+            <Link to="/tournaments/results" className={styles.registerButton}>
+              <span className={styles.buttonText}>View Results</span>
+            </Link>
+            <Link to="/tournaments/draws" className={styles.loginButton}>
+              <span className={styles.buttonText}>View Draws</span>
             </Link>
           </div>
-        </section> */}
+        </section>
 
         {/* Tournament Details Section */}
         <section className={styles.section} id="eventDetails">
@@ -501,7 +478,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
         {/* Prizes & Benefits Section */}
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Prizes & Benefits</h2>
@@ -558,7 +534,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
         {/* Venue & Important Information Section */}
         <section className={styles.section} id="contactInfo">
           {" "}

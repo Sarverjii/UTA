@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get("/", PlayerController.getPlayers);
 router.get("/details", isAdmin, PlayerController.getPlayersWithDetails);
+router.get("/details-frontend", PlayerController.getPlayersWithDetailsFrontend);
 router.post("/register/", PlayerController.RegisterPlayer);
 router.post("/login", PlayerController.loginPlayer);
 router.get("/:id", PlayerController.getLoggedInPlayer);

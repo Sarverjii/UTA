@@ -15,6 +15,7 @@ import Home from "./Pages/Home/Home";
 import Nissan_Home from "./Pages/Nissan_Home/Nissan_Home";
 import Nissan_Register from "./Pages/Nissan_Register/Nissan_Register";
 import Nissan_RegisteredPlayers from "./Pages/Nissan_RegisteredPlayers/Nissan_RegisteredPlayers";
+import Nissan_PlayerList from "./Pages/Nissan_PlayerList/PlayerList.jsx";
 import Nissan_Login from "./Pages/Nissan_Login/Nissan_Login";
 import Nissan_Login_Page from "./Pages/Nissan_Login/LoginPage.jsx";
 
@@ -48,6 +49,10 @@ const router = createBrowserRouter(
       <Route
         path="/tournaments/registered-teams"
         element={<Nissan_RegisteredPlayers />}
+      />
+      <Route
+        path="/tournaments/registered-players"
+        element={<Nissan_PlayerList />}
       />
       <Route path="/tournaments/login" element={<Nissan_Login />} />
       <Route path="/tournaments/login/:id" element={<Nissan_Login_Page />} />
