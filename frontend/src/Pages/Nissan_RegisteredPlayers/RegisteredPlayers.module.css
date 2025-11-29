@@ -8,6 +8,7 @@
   font-family: 'Inter', sans-serif;
   /* Ensures primary content is horizontally centered within the container */
   align-items: center;
+  padding-bottom: 15px;
 }
 
 /* --- Header Styles: Flexible, Aesthetic, Professional --- */

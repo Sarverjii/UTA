@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./Home.module.css"; // Import CSS module
+import Header from "../../Components/Header/Header";
+import Footer from "../../Components/Footer/Footer";
 
 export default function Home() {
   const [events, setEvents] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // State for mobile menu
-
+  const [tournamentDetail, setTournamentDetail] = useState([]);
+  const [pricesBenefit, setpricesBenefit] = useState([]);
+  const [venue, setvenue] = useState([]);
   // Function to fetch events from the backend
   const getEvents = async () => {
     try {
@@ -26,6 +30,57 @@ export default function Home() {
     }
   };
 
+  const getTournamentDetail = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_APP_BACKEND_URL}/api/tournament-details/`,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      if (res.data.success) {
+        setTournamentDetail(res.data.data);
+      }
+    } catch (error) {
+      console.log("Error fetching events:", error);
+    }
+  };
+
+  const getPricesBenifit = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_APP_BACKEND_URL}/api/prices-benifit/`,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      if (res.data.success) {
+        setpricesBenefit(res.data.data);
+      }
+    } catch (error) {
+      console.log("Error fetching events:", error);
+    }
+  };
+
+  const getvenue = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_APP_BACKEND_URL}/api/venue/`,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      if (res.data.success) {
+        setvenue(res.data.data);
+      }
+    } catch (error) {
+      console.log("Error fetching events:", error);
+    }
+  };
+
   // Function for smooth scrolling
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -38,22 +93,25 @@ export default function Home() {
   // Effect hook to fetch events on component mount and scroll to top
   useEffect(() => {
     getEvents();
+    getTournamentDetail();
+    getPricesBenifit();
+    getvenue();
     window.scrollTo(0, 0);
   }, []);
 
   return (
     <div className={styles.homeContainer}>
       {/* Header Section */}
-      <header className={styles.header}>
+      <Header />
+
+      {/* <header className={styles.header}>
         <div className={styles.headerLogoGroup}>
-          {/* Logo SVG */}
           <div className={styles.logoIcon}>
             <img src="/logo.png" alt="UTA LOGO" />
           </div>
-          <h2 className={styles.headerTitle}>Uttranchal Tennis Association</h2>
+          <h2 className={styles.headerTitle}>Uttaranchal Tennis Association</h2>
         </div>
         <div className={styles.headerNavActions}>
-          {/* Navigation Links */}
           <div className={styles.navbarNav}>
             <a
               className={styles.navLink}
@@ -89,7 +147,6 @@ export default function Home() {
               Registered Players
             </a>
           </div>
-          {/* Action Buttons */}
           <div className={styles.headerButtons}>
             <Link
               to="/Nissan/register" // Assuming a registration route
@@ -105,7 +162,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        {/* Mobile menu icon */}
+
         <div className={styles.mobileMenuIcon}>
           <button
             className={styles.mobileMenuButton}
@@ -127,10 +184,10 @@ export default function Home() {
             </svg>
           </button>
         </div>
-      </header>
+      </header> */}
 
       {/* Mobile Navigation Overlay */}
-      <div
+      {/* <div
         className={`${styles.mobileNavOverlay} ${
           mobileMenuOpen ? styles.mobileNavOpen : ""
         }`}
@@ -168,7 +225,7 @@ export default function Home() {
           >
             Home
           </a>
-          {/* <a className={styles.navLink} href="#" onClick={() => scrollToSection("aboutSectionId")}>About</a> */}
+          <a className={styles.navLink} href="#" onClick={() => scrollToSection("aboutSectionId")}>About</a>
           <a
             className={styles.navLink}
             href="#"
@@ -209,7 +266,7 @@ export default function Home() {
             <span className={styles.buttonText}>Login</span>
           </Link>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Content Sections (Tiles) */}
       <main className={styles.mainContent}>
@@ -229,23 +286,54 @@ export default function Home() {
                 {/* Added for dark overlay */}
                 <div className={styles.bannerTextGroup}>
                   <h1 className={styles.bannerTitle}>
-                    Nissan All India Open Seniors Tennis Tournament 2024,
-                    Dehradun
+                    {/* All India Open Seniors Tennis Tournament 2025, Dehradun */}
+                    Indian Tree Open Masters Tennis Tournament 2025, dehradun
                   </h1>
                   <h2 className={styles.bannerSubtitle}>
-                    Join us for an exciting tournament in the heart of Dehradun!
+                    Dates : 20th and 21st December
                   </h2>
                 </div>
                 <div className={styles.bannerButtons}>
-                  <Link to="/Nissan/register" className={styles.registerButton}>
+                  <Link
+                    to="/tournaments/register"
+                    className={styles.registerButton}
+                  >
                     <span className={styles.buttonText}>Register Now</span>
                   </Link>
-                  <Link to="/Nissan/login" className={styles.loginButton}>
+                  <Link to="/tournaments/login" className={styles.loginButton}>
                     <span className={styles.buttonText}>Login</span>
                   </Link>
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+        {/* Ready to Participate Section */}
+        <section className={`${styles.ctaSection} ${styles.fullWidthCta}`}>
+          <h2 className={styles.sectionTitle}>Ready to Participate?</h2>
+          <p className={styles.ctaParagraph}>
+            Join us for an exciting tennis tournament with great prizes and
+            networking opportunities!
+          </p>
+          <div className={styles.ctaButtons}>
+            <Link
+              to="/tournaments/registered-teams"
+              className={styles.registerButton}
+            >
+              <span className={styles.buttonText}>View Registered Teams</span>
+            </Link> 
+            <Link
+              to="/tournaments/registered-players"
+              className={styles.loginButton}
+            >
+              <span className={styles.buttonText}>View Registered Players</span>
+            </Link>
+            <Link to="/tournaments/results" className={styles.registerButton}>
+              <span className={styles.buttonText}>View Results</span>
+            </Link>
+            <Link to="/tournaments/draws" className={styles.loginButton}>
+              <span className={styles.buttonText}>View Draws</span>
+            </Link>
           </div>
         </section>
 
@@ -267,12 +355,52 @@ export default function Home() {
                     <li>No categories available.</li>
                   )}
                 </ul>
-                <h4 className={styles.tileSubtitle}>Lucky Doubles Format:</h4>
-                <p className={styles.tileParagraph}>
+
+                {/* {tournamentDetail.map((item) => (
+                  <div className="detailsPara" key={item._id}>
+                    <h4 className={styles.tileSubtitle}>{item.key}</h4>
+                    <div className={styles.tileParagraph}>  
+                      <div className="detailsPara" dangerouslySetInnerHTML={{ __html: item.value }}/>
+                    </div>
+                  </div>
+                ))} */}
+
+                {tournamentDetail.map((item) =>
+                  item.key === "1" ? (
+                    <div key={item._id}>
+                      {item.showing && (
+                        <>
+                          <h4>{item.title}</h4>
+                          <p
+                            className="db-content"
+                            dangerouslySetInnerHTML={{ __html: item.value }}
+                          />
+                        </>
+                      )}
+                    </div>
+                  ) : null
+                )}
+
+                {tournamentDetail.map((item) =>
+                  item.key === "2" ? (
+                    <div key={item._id}>
+                      {item.showing && (
+                        <>
+                          <h4>{item.title}</h4>
+                          <p
+                            className="db-content"
+                            dangerouslySetInnerHTML={{ __html: item.value }}
+                          />
+                        </>
+                      )}
+                    </div>
+                  ) : null
+                )}
+                {/* <p className={styles.tileParagraph}>
                   Any participant who loses both matches in the first round or
                   loses in the first round of a single event will be eligible.
-                </p>
-                <h5 className={styles.tileSmallHeading}>Pairing Logic:</h5>
+                </p> */}
+                {/* <h5 className={styles.tileSmallHeading}>Pairing Logic:</h5>
                 <ul className={styles.tileList}>
                   <li>
                     Participants divided into X (Age $\leq$ 50) and Y (Age {">"}
@@ -282,7 +410,7 @@ export default function Home() {
                     Each pair will have one person from X and one from Y based
                     on lottery system
                   </li>
-                </ul>
+                </ul> */}
               </div>
             </div>
 
@@ -290,7 +418,22 @@ export default function Home() {
             <div className={styles.tile}>
               <h3 className={styles.tileTitle}>Entry & Participation</h3>
               <div className={styles.tileContent}>
-                <h4 className={styles.tileSubtitle}>Entry Rules:</h4>
+                {tournamentDetail.map((item) =>
+                  item.key === "3" ? (
+                    <div key={item._id}>
+                      {item.showing && (
+                        <>
+                          <h4>{item.title}</h4>
+                          <p
+                            className="db-content"
+                            dangerouslySetInnerHTML={{ __html: item.value }}
+                          />
+                        </>
+                      )}
+                    </div>
+                  ) : null
+                )}
+                {/* <h4 className={styles.tileSubtitle}>Entry Rules:</h4>
                 <ul className={styles.tileList}>
                   <li>
                     One player can participate in max 2 categories (excluding
@@ -299,107 +442,178 @@ export default function Home() {
                   <li>Coaches are allowed to play in Category A only</li>
                   <li>Maximum draw size in any category is 32</li>
                   <li>Please carry age proof with you</li>
-                </ul>
-                <h4 className={styles.tileSubtitle}>Entry Fees</h4>
-                <p className={styles.tileParagraph}>Two events: ₹4,500</p>
-                <p className={styles.tileParagraph}>
+                </ul> */}
+
+                {tournamentDetail.map((item) =>
+                  item.key === "4" ? (
+                    <div key={item._id}>
+                      {item.showing && (
+                        <>
+                          <h4>{item.title}</h4>
+                          <p
+                            className="db-content"
+                            dangerouslySetInnerHTML={{ __html: item.value }}
+                          />
+                        </>
+                      )}
+                    </div>
+                  ) : null
+                )}
+                {/* <h4 className={styles.tileSubtitle}>Entry Fees</h4>
+                <p className={styles.tileParagraph}>Two events: ₹5,000</p> */}
+                {/* <p className={styles.tileParagraph}>
                   Two events with accommodation: ₹6,000 (double sharing up to 2
                   days)
-                </p>
-                <p className={styles.tileParagraph}>One event: ₹3,000</p>
-                <p className={styles.tileParagraphLast}>
+                </p> */}
+                {/* <p className={styles.tileParagraph}>One event: ₹3,500</p> */}
+                {/* <p className={styles.tileParagraphLast}>
                   One event with accommodation: ₹4,500 (double sharing up to 2
                   days)
-                </p>
-                <h5 className={styles.tileImportantDate}>
-                  Last date for entry fees: December 7, 2024
-                </h5>
+                </p> */}
+                {/* <h5 className={styles.tileImportantDate}>
+                  Last date for entry fees
+                  : December 7, 2024
+                </h5> */}
               </div>
             </div>
           </div>
         </section>
-
         {/* Prizes & Benefits Section */}
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Prizes & Benefits</h2>
           <div className={styles.gridContainer}>
             {/* Prize Money Tile */}
             <div className={styles.tile}>
-              <h3 className={styles.tileTitle}>Prize Money</h3>
-              <ul className={styles.tileList}>
+              {pricesBenefit.map((item) =>
+                item.key === "1" ? (
+                  <div key={item._id}>
+                    <h3 className={styles.tileTitle}>{item.title}</h3>
+                    {item.showing && (
+                      <p
+                        className="db-content"
+                        dangerouslySetInnerHTML={{ __html: item.value }}
+                      />
+                    )}
+                  </div>
+                ) : null
+              )}
+              {/* <h3 className={styles.tileTitle}>Prize Money</h3> */}
+              {/* <ul className={styles.tileList}>
                 <li>Winner team: ₹21,000</li>
                 <li>Runners-up team: ₹11,000</li>
                 <li>Semi-Finalist teams: ₹4,000 each</li>
                 <li>Lucky Doubles: 50% of regular prizes</li>
-              </ul>
+              </ul> */}
             </div>
+
             {/* Participant Benefits Tile */}
             <div className={styles.tile}>
-              <h3 className={styles.tileTitle}>Participant Benefits</h3>
-              <ul className={styles.tileList}>
+              {pricesBenefit.map((item) =>
+                item.key === "2" ? (
+                  <div key={item._id}>
+                    <h3 className={styles.tileTitle}>{item.title}</h3>
+                    {item.showing && (
+                      <p
+                        className="db-content"
+                        dangerouslySetInnerHTML={{ __html: item.value }}
+                      />
+                    )}
+                  </div>
+                ) : null
+              )}
+
+              {/* <h3 className={styles.tileTitle}>Participant Benefits</h3> */}
+              {/* <ul className={styles.tileList}>
                 <li>Breakfast and Lunch on both days</li>
                 <li>Gala dinner on December 9</li>
                 <li>
                   Every participant receives Indian Tree T-Shirt, Shorts, Socks,
                   Cap, Wristband (MRP more than ₹3,000)
                 </li>
-              </ul>
+              </ul> */}
             </div>
           </div>
         </section>
-
         {/* Venue & Important Information Section */}
         <section className={styles.section} id="contactInfo">
           {" "}
           {/* Added id="contactInfo" for Contact link */}
+          {/* {pricesBenefit.map((item) =>
+                item.key === "2" ? (
+                  <div key={item._id}>
+                    <h3 className={styles.tileTitle}>{item.title}</h3>
+                    {item.showing && (
+                      
+                    )}
+                  </div>
+                ) : null,
+              )} */}
           <h2 className={styles.sectionTitle}>Venue & Important Information</h2>
           <div className={styles.gridContainerMaps}>
             {/* Tournament Venue Tile */}
-            <div className={styles.tile}>
-              <h3 className={styles.tileTitle}>Tournament Venue:</h3>
-              <h2>Shanti Tennis Academy, Dehradun</h2>
-              <p className={styles.tileParagraph}>
-                4 hard courts + 4 additional hard courts at nearby venue if
-                required
-              </p>
-              <div className={styles.mapContainer}>
-                {/* Corrected Google Maps Embed for Shanti Tennis Academy */}
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4144.13129430105!2d78.0512385762313!3d30.309067774791345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390929af78d571c3%3A0xce2d2329a1ca3d38!2sShanti%20Tennis%20Academy!5e1!3m2!1sen!2sin!4v1750927295337!5m2!1sen!2sin"
-                  width="600"
-                  height="450"
-                  style={{ border: 0 }}
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className={styles.mapFrame}
-                ></iframe>
-              </div>
-            </div>
+            {venue.map((item) =>
+              item.key === "1" ? (
+                <div className={styles.tile}>
+                  <h3 className={styles.tileTitle}>{item.title}</h3>
+                  <h2>{item.venue}</h2>
+                  <p className={styles.tileParagraph}>{item.address}</p>
+                  <div className={styles.mapContainer}>
+                    {/* Corrected Google Maps Embed for Shanti Tennis Academy */}
+                    <iframe
+                      src={item.mapLink}
+                      width="600"
+                      height="450"
+                      style={{ border: 0 }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className={styles.mapFrame}
+                    ></iframe>
+                  </div>
+                </div>
+              ) : null
+            )}
+
             {/* Gala Party & Stay Tile */}
-            <div className={styles.tile}>
-              <h3 className={styles.tileTitle}>Gala Party & Stay</h3>
-              <h2>Om Farms</h2>
-              <p className={styles.tileParagraph}>
-                8-A, Jogiwala, Badripur, Dehradun
-              </p>
-              <div className={styles.mapContainer}>
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4145.237671631134!2d78.0583008873412!3d30.282890209839486!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39092959191d4435%3A0x4fe509851fb5806b!2sOM%20farms!5e1!3m2!1sen!2sin!4v1750927278537!5m2!1sen!2sin"
-                  width="600"
-                  height="450"
-                  style={{ border: 0 }}
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className={styles.mapFrame}
-                ></iframe>
-              </div>
-            </div>
+            {venue.map((item) =>
+              item.key === "2" ? (
+                <div className={styles.tile}>
+                  <h3 className={styles.tileTitle}>{item.title}</h3>
+                  <h2>{item.venue}</h2>
+                  <p className={styles.tileParagraph}>{item.address}</p>
+                  <div className={styles.mapContainer}>
+                    <iframe
+                      src={item.mapLink}
+                      width="600"
+                      height="450"
+                      style={{ border: 0 }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className={styles.mapFrame}
+                    ></iframe>
+                  </div>
+                </div>
+              ) : null
+            )}
           </div>
           {/* Important Information Tile - Moved to span full width */}
           <div className={`${styles.tile} ${styles.fullWidthTile}`}>
-            <h3 className={styles.tileTitle}>Important Information</h3>
+            {tournamentDetail.map((item) =>
+              item.key === "5" ? (
+                <>
+                  <h3 className={styles.tileTitle}>{item.title}</h3>
+                  {item.showing && (
+                    <p
+                      className="db-content"
+                      dangerouslySetInnerHTML={{ __html: item.value }}
+                    />
+                  )}
+                </>
+              ) : null
+            )}
+
+            {/* <h3 className={styles.tileTitle}>Important Information</h3>
             <ul className={styles.tileList}>
               <li>Draws and Order of Play published on December 8</li>
               <li>
@@ -411,38 +625,20 @@ export default function Home() {
                 For queries contact{" "}
                 <b>Tournament Director: Sumit Goel (Ph. 9412977857)</b>
               </li>
-            </ul>
-          </div>
-        </section>
-
-        {/* Ready to Participate Section */}
-        <section className={`${styles.ctaSection} ${styles.fullWidthCta}`}>
-          <h2 className={styles.sectionTitle}>Ready to Participate?</h2>
-          <p className={styles.ctaParagraph}>
-            Join us for an exciting tennis tournament with great prizes and
-            networking opportunities!
-          </p>
-          <div className={styles.ctaButtons}>
-            <Link to="/Nissan/register" className={styles.registerButtonCta}>
-              <span className={styles.buttonText}>Register Now</span>
-            </Link>
-            <Link
-              to="/Nissan/registered-players"
-              className={styles.loginButtonCta}
-            >
-              <span className={styles.buttonText}>Registered Players</span>
-            </Link>
+            </ul> */}
           </div>
         </section>
       </main>
 
       {/* Footer Section */}
-      <footer className={styles.footer}>
+      {/* <footer className={styles.footer}>
         <p className={styles.footerText}>
           © {new Date().getFullYear()} Uttranchal Tennis Association. All rights
           reserved.
         </p>
-      </footer>
+      </footer> */}
+
+      <Footer />
     </div>
   );
 }

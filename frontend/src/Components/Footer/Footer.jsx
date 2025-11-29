@@ -20,7 +20,7 @@ const Footer = () => {
           <div className={styles.footerLogoGroup}>
             <img src="/logo.png" alt="UTA Logo" className={styles.footerLogo} />
             <h3 className={styles.footerTitle}>
-              Uttranchal Tennis Association
+              Uttaranchal Tennis Association
             </h3>
           </div>
           <p className={styles.footerDescription}>
@@ -56,17 +56,17 @@ const Footer = () => {
           <h4>Contact Us</h4>
           {/* REMOVED the <p> tag here */} {" "}
           <address>
-            123 Tennis Court Road, <br />
+            32, E. C. Road, <br />
             Dehradun, Uttarakhand, <br />  India - 248001{" "}
           </address>{" "}
           <p>
             Email:{" "}
-            <a href="mailto:info@utranchaltennis.org">
-              info@utranchaltennis.org{" "}
+            <a href="mailto:utennisa@gmail.com">
+              utennisa@gmail.com{" "}
             </a>{" "}
           </p>{" "}
           <p>
-            Phone: <a href="tel:+911234567890">+91 12345 67890</a> {" "}
+            Phone: <a href="tel:+919412047481">+91 9412047481</a> {" "}
           </p>{" "}
         </div>
 
@@ -109,7 +109,7 @@ const Footer = () => {
       {/* Bottom Bar: Copyright and Policy Links */}
       <div className={styles.footerBottomBar}>
         <p>
-          &copy; {new Date().getFullYear()} Uttranchal Tennis Association. All
+          &copy; {new Date().getFullYear()} Uttaranchal Tennis Association. All
           rights reserved.
         </p>
         <div className={styles.policyLinks}>

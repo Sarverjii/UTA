@@ -27,7 +27,6 @@ const Home = () => {
         const response = await axios.get(
           `${import.meta.env.VITE_APP_BACKEND_URL}/api/main-events`
         );
-        console.log(response);
         setEvents(response.data.data.slice(0, 3)); // Get first 3 events
       } catch (error) {
         console.error("Error fetching events:", error);
@@ -46,19 +45,19 @@ const Home = () => {
   // Data for Key Personnel
   const keyPersonnel = [
     {
-      name: "Arjun Sharma",
+      name: "Ashok Kumar",
       position: "President",
-      contact: "arjun.sharma@uta.org",
+      contact: "ashokkumar@bccinfra.com",
     },
     {
-      name: "Priya Verma",
+      name: "Sumit Goel",
       position: "Secretary",
-      contact: "priya.verma@uta.org",
+      contact: "sumitgoel@gmail.com",
     },
     {
-      name: "Rohan Kapoor",
+      name: "Dinesh Nagpal",
       position: "Treasurer",
-      contact: "rohan.kapoor@uta.org",
+      contact: "dineshnagpal@yahoo.com",
     },
   ];
 
@@ -69,12 +68,12 @@ const Home = () => {
           className={styles.homeBanner}
           style={{ backgroundImage: backgroundImage }}
         >
-          <h1>Welcome to Uttranchal Tennis Association</h1>
+          <h1>Welcome to Uttaranchal Tennis Association</h1>
           <p>Promoting tennis excellence in the heart of the Himalayas.</p>
           <Link to="/tournaments">Explore Tournaments</Link>
         </div>
 
-        <section className={styles.upcomingEvents}>
+        {/* <section className={styles.upcomingEvents}>
           <div className={styles.upcomingEventsHeader}>
             <h2>Upcoming Events</h2>
           </div>
@@ -88,7 +87,7 @@ const Home = () => {
               />
             ))}
           </div>
-        </section>
+        </section> */}
 
         {/* New Section: Home Grid Section */}
         <section className={styles.homeGridSection}>
@@ -115,7 +114,7 @@ const Home = () => {
               <p>Represent your District in state events</p>
             </div>
           </div>
-          <Link to="/join-us">Join Us Now</Link>{" "}
+          <Link to="/joinUs">Join Us Now</Link>{" "}
         </section>
 
         {/* REPLACED: Key Personnel Section (from Table to Cards) */}

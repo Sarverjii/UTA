@@ -72,7 +72,7 @@ const RegisterPage3 = ({ formData }) => {
             {/* You might want a button to navigate to the login page */}
             <button
               className={styles.button}
-              onClick={() => (window.location.href = "/login")}
+              onClick={() => (window.location.href = "/tournaments/login")}
             >
               Go to Login
             </button>

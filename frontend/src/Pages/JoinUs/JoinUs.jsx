@@ -18,7 +18,7 @@ const JoinUs = () => {
           <div className={styles.introSection}>
             <p className={styles.introHeading}>Join Us</p>
             <p className={styles.introDescription}>
-              Become a part of the Uttarakhand Tennis Association and contribute
+              Become a part of the Uttaranchal Tennis Association and contribute
               to the growth of tennis in the region. Choose your membership
               category below.
             </p>
