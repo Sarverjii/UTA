@@ -45,6 +45,7 @@ const Home = () => {
   // Data for Key Personnel
   const keyPersonnel = [
     {
+<<<<<<< HEAD
       name: "Ashok Kumar",
       position: "President",
       contact: "ashokkumar@bccinfra.com",
@@ -58,6 +59,21 @@ const Home = () => {
       name: "Dinesh Nagpal",
       position: "Treasurer",
       contact: "dineshnagpal@yahoo.com",
+=======
+      name: "S. P. Singh",
+      position: "President",
+      contact: "spsingh@bccinfra.com",
+    },
+    {
+      name: "Vijendra Chauhan",
+      position: "Secretary",
+      contact: "vijendrachauhan@gmail.com",
+    },
+    {
+      name: "Shailendra Kumar Sharma",
+      position: "Treasurer",
+      contact: "jaimatadi_sk@yahoo.com",
+>>>>>>> b3d1b0a466c9572e45594395744bf30302532410
     },
   ];
 
